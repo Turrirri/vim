@@ -1,0 +1,10 @@
+.
+├── autoload
+├── backups
+├── colors
+├── plugged
+├── spell
+├── undo
+├── view
+├── viminfo
+└── vimswaps

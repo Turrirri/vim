@@ -1,0 +1,223 @@
+
+
+n  <Space>rn    @<Plug>(lsp-rename)
+x  ["          *@:<C-U>exe "normal! gv"|call search('\%(^\s*".*\n\)\%(^\s*"\)\@!', "bW")<CR>
+n  ["          *@:call search('\%(^\s*".*\n\)\%(^\s*"\)\@!', "bW")<CR>
+x  []          *@m':<C-U>exe "normal! gv"|call search('^\s*end\(f\%[unction]\|\(export\s\+\)\?def\)\>', "bW")<CR>
+n  []          *@m':call search('^\s*end\(f\%[unction]\|\(export\s\+\)\?def\)\>', "bW")<CR>
+x  [[          *@m':<C-U>exe "normal! gv"|call search('^\s*\(fu\%[nction]\|\(export\s\+\)\?def\)\>', "bW")<CR>
+n  [[          *@m':call search('^\s*\(fu\%[nction]\|\(export\s\+\)\?def\)\>', "bW")<CR>
+x  ]"          *@:<C-U>exe "normal! gv"|call search('\%(^\s*".*\n\)\@<!\%(^\s*"\)', "W")<CR>
+n  ]"          *@:call search('\%(^\s*".*\n\)\@<!\%(^\s*"\)', "W")<CR>
+x  ][          *@m':<C-U>exe "normal! gv"|call search('^\s*end\(f\%[unction]\|\(export\s\+\)\?def\)\>', "W")<CR>
+n  ][          *@m':call search('^\s*end\(f\%[unction]\|\(export\s\+\)\?def\)\>', "W")<CR>
+x  ]]          *@m':<C-U>exe "normal! gv"|call search('^\s*\(fu\%[nction]\|\(export\s\+\)\?def\)\>', "W")<CR>
+n  ]]          *@m':call search('^\s*\(fu\%[nction]\|\(export\s\+\)\?def\)\>', "W")<CR>
+n  gf          *@:<C-U>call vimgoto#Find('gF')<CR>
+   <M-p>       *@:call AutoPairsToggle()<CR>
+   <M-n>       *@:call AutoPairsJump()<CR>
+n  <C-W>gf     *@:<C-U>call vimgoto#Find("\<C-W>gF")<CR>
+n  <C-W>f      *@:<C-U>call vimgoto#Find("\<C-W>F")<CR>
+x  <Tab>       * :call UltiSnips#SaveLastVisualSelection()<CR>gvs
+s  <Tab>       * <Esc>:call UltiSnips#ExpandSnippetOrJump()<CR>
+n  <Space>d    * :YcmShowDetailedDiagnostic<CR>
+v  <Space>     * :silent <C-U> :silent WhichKeyVisual ' '<CR>
+n  <Space>t    * :bel term<CR>
+n  <Space>w    * = :w !sudo tee > /dev/null %<CR>
+n  <Space>u    * :UndotreeToggle<CR>
+n  <Space>tp   * = :tabprev<CR>
+n  <Space>to   * = :tabonly<CR>
+n  <Space>tn   * = :tabNext<CR>
+n  <Space>te   * = :tabedit<Space>
+n  <Space>tc   * = :tabclose<CR>
+n  <Space>fv   * = :vimgrep<Space>
+   <Space>qs     :wq!<CR>
+   <Space>qq     :qa!<CR>
+   <Space>h      :noh<CR>
+   <Space>e      :20Lex<CR>
+n  <Space>     * :silent <C-U> :silent WhichKey ' '<CR>
+n  #           * #zz
+n  *           * *zz
+n  ,           * :<C-U>WhichKey  ','<CR>
+v  /           * /\v
+n  N           * Nzz
+x  S             <Plug>VSurround
+n  \K          * :call dist#man#PreGetPage(0)<CR>
+n  cS            <Plug>CSurround
+n  cs            <Plug>Csurround
+n  ds            <Plug>Dsurround
+x  gx            <Plug>(open-word-under-cursor)
+n  gx            <Plug>(open-word-under-cursor)
+x  gS            <Plug>VgSurround
+n  gc          * BBE
+n  g*          * g*zz
+n  g#          * g#zz
+n  j           * gj
+n  k           * gk
+n  n           * nzz
+v  s             S
+n  ySS           <Plug>YSsurround
+n  ySs           <Plug>YSsurround
+n  yss           <Plug>Yssurround
+n  yS            <Plug>YSurround
+n  ys            <Plug>Ysurround
+   <Plug>AirlineSelectNextTab * :<C-U>call <SNR>104_jump_to_tab(v:count1)<CR>
+   <Plug>AirlineSelectPrevTab * :<C-U>call <SNR>104_jump_to_tab(-v:count1)<CR>
+   <Plug>AirlineSelectTab0 * :call <SNR>104_select_tab(9)<CR>
+   <Plug>AirlineSelectTab9 * :call <SNR>104_select_tab(8)<CR>
+   <Plug>AirlineSelectTab8 * :call <SNR>104_select_tab(7)<CR>
+   <Plug>AirlineSelectTab7 * :call <SNR>104_select_tab(6)<CR>
+   <Plug>AirlineSelectTab6 * :call <SNR>104_select_tab(5)<CR>
+   <Plug>AirlineSelectTab5 * :call <SNR>104_select_tab(4)<CR>
+   <Plug>AirlineSelectTab4 * :call <SNR>104_select_tab(3)<CR>
+   <Plug>AirlineSelectTab3 * :call <SNR>104_select_tab(2)<CR>
+   <Plug>AirlineSelectTab2 * :call <SNR>104_select_tab(1)<CR>
+   <Plug>AirlineSelectTab1 * :call <SNR>104_select_tab(0)<CR>
+n  <Plug>(YCMFindSymbolInDocument) * :call youcompleteme#finder#FindSymbol( 'document' )<CR>
+n  <Plug>(YCMFindSymbolInWorkspace) * :call youcompleteme#finder#FindSymbol( 'workspace' )<CR>
+n  <Plug>(YCMCallHierarchy) * <Cmd>call youcompleteme#hierarchy#StartRequest( 'call' )<CR>
+n  <Plug>(YCMTypeHierarchy) * <Cmd>call youcompleteme#hierarchy#StartRequest( 'type' )<CR>
+n  <Plug>(YCMToggleInlayHints) * <Cmd>call <SNR>161_ToggleInlayHints()<CR>
+n  <Plug>(YCMHover) * :<C-U>call <SNR>161_ToggleHover()<CR>
+x  <Plug>(open-word-under-cursor) * <ScriptCmd>vim9.Open(getregion(getpos('v'), getpos('.'), { type: mode() })->join())<CR>
+n  <Plug>(open-word-under-cursor) * <ScriptCmd>vim9.Open(GetWordUnderCursor())<CR>
+v  <Plug>VgSurround * :<C-U>call <SNR>50_opfunc(visualmode(),visualmode() ==# 'V' ? 0 : 1)<CR>
+v  <Plug>VSurround * :<C-U>call <SNR>50_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>
+n  <Plug>YSurround * <SNR>50_opfunc2('setup')
+n  <Plug>Ysurround * <SNR>50_opfunc('setup')
+n  <Plug>YSsurround * <SNR>50_opfunc2('setup').'_'
+n  <Plug>Yssurround * '^'.v:count1.<SNR>50_opfunc('setup').'g_'
+n  <Plug>CSurround * :<C-U>call <SNR>50_changesurround(1)<CR>
+n  <Plug>Csurround * :<C-U>call <SNR>50_changesurround()<CR>
+n  <Plug>Dsurround * :<C-U>call <SNR>50_dosurround(<SNR>50_inputtarget())<CR>
+n  <Plug>SurroundRepeat * .
+s  <C-R>       * <C-G>"_c<C-R>
+s  <C-H>       * <C-G>"_c
+s  <Del>       * <C-G>"_c
+s  <BS>        * <C-G>"_c
+s  <C-Tab>     * <Esc>:call UltiSnips#ListSnippets()<CR>
+n  <Plug>(lsp-signature-help) * :<C-U>call lsp#ui#vim#signature_help#get_signature_help_under_cursor()<CR>
+n  <Plug>(lsp-previous-reference) * :<C-U>call lsp#internal#document_highlight#jump(-1)<CR>
+n  <Plug>(lsp-next-reference) * :<C-U>call lsp#internal#document_highlight#jump(+1)<CR>
+n  <Plug>(lsp-status) * :<C-U>echo lsp#get_server_status()<CR>
+n  <Plug>(lsp-peek-implementation) * :<C-U>call lsp#ui#vim#implementation(1)<CR>
+n  <Plug>(lsp-implementation) * :<C-U>call lsp#ui#vim#implementation(0)<CR>
+x  <Plug>(lsp-document-range-format) * :<Home>silent <End>call lsp#internal#document_range_formatting#format({ 'bufnr': bufnr('%') })<CR>
+n  <Plug>(lsp-document-range-format) * :<C-U>set opfunc=lsp#internal#document_range_formatting#opfunc<CR>g@
+v  <Plug>(lsp-document-format) * :<Home>silent <End>call lsp#internal#document_range_formatting#format({ 'bufnr': bufnr('%') })<CR>
+n  <Plug>(lsp-document-format) * :<C-U>call lsp#internal#document_formatting#format({ 'bufnr': bufnr('%') })<CR>
+n  <Plug>(lsp-workspace-symbol-search) * :<C-U>call lsp#internal#workspace_symbol#search#do({})<CR>
+n  <Plug>(lsp-workspace-symbol) * :<C-U>call lsp#ui#vim#workspace_symbol('')<CR>
+n  <Plug>(lsp-peek-type-definition) * :<C-U>call lsp#ui#vim#type_definition(1)<CR>
+n  <Plug>(lsp-type-hierarchy) * :<C-U>call lsp#internal#type_hierarchy#show()<CR>
+n  <Plug>(lsp-type-definition) * :<C-U>call lsp#ui#vim#type_definition(0)<CR>
+n  <Plug>(lsp-rename) * :<C-U>call lsp#ui#vim#rename({})<CR>
+n  <Plug>(lsp-references) * :<C-U>call lsp#ui#vim#references({})<CR>
+n  <Plug>(lsp-previous-diagnostic-nowrap) * :<C-U>call lsp#internal#diagnostics#movement#_previous_diagnostics("-wrap=0")<CR>
+n  <Plug>(lsp-previous-diagnostic) * :<C-U>call lsp#internal#diagnostics#movement#_previous_diagnostics()<CR>
+n  <Plug>(lsp-next-diagnostic-nowrap) * :<C-U>call lsp#internal#diagnostics#movement#_next_diagnostics("-wrap=0")<CR>
+n  <Plug>(lsp-next-diagnostic) * :<C-U>call lsp#internal#diagnostics#movement#_next_diagnostics()<CR>
+n  <Plug>(lsp-previous-warning-nowrap) * :<C-U>call lsp#internal#diagnostics#movement#_previous_warning("-wrap=0")<CR>
+n  <Plug>(lsp-previous-warning) * :<C-U>call lsp#internal#diagnostics#movement#_previous_warning()<CR>
+n  <Plug>(lsp-next-warning-nowrap) * :<C-U>call lsp#internal#diagnostics#movement#_next_warning("-wrap=0")<CR>
+n  <Plug>(lsp-next-warning) * :<C-U>call lsp#internal#diagnostics#movement#_next_warning()<CR>
+n  <Plug>(lsp-previous-error-nowrap) * :<C-U>call lsp#internal#diagnostics#movement#_previous_error("-wrap=0")<CR>
+n  <Plug>(lsp-previous-error) * :<C-U>call lsp#internal#diagnostics#movement#_previous_error()<CR>
+n  <Plug>(lsp-next-error-nowrap) * :<C-U>call lsp#internal#diagnostics#movement#_next_error("-wrap=0")<CR>
+n  <Plug>(lsp-next-error) * :<C-U>call lsp#internal#diagnostics#movement#_next_error()<CR>
+n  <Plug>(lsp-preview-focus) * :<C-U>call lsp#ui#vim#output#focuspreview()<CR>
+n  <Plug>(lsp-preview-close) * :<C-U>call lsp#ui#vim#output#closepreview()<CR>
+n  <Plug>(lsp-hover-preview) * :<C-U>call lsp#internal#document_hover#under_cursor#do({ 'ui': 'preview' })<CR>
+n  <Plug>(lsp-hover-float) * :<C-U>call lsp#internal#document_hover#under_cursor#do({ 'ui': 'float' })<CR>
+n  <Plug>(lsp-hover) * :<C-U>call lsp#internal#document_hover#under_cursor#do({})<CR>
+n  <Plug>(lsp-document-diagnostics) * :<C-U>call lsp#internal#diagnostics#document_diagnostics_command#do({})<CR>
+n  <Plug>(lsp-document-symbol-search) * :<C-U>call lsp#internal#document_symbol#search#do({})<CR>
+n  <Plug>(lsp-document-symbol) * :<C-U>call lsp#ui#vim#document_symbol()<CR>
+n  <Plug>(lsp-peek-definition) * :<C-U>call lsp#ui#vim#definition(1)<CR>
+n  <Plug>(lsp-definition) * :<C-U>call lsp#ui#vim#definition(0)<CR>
+n  <Plug>(lsp-peek-declaration) * :<C-U>call lsp#ui#vim#declaration(1)<CR>
+n  <Plug>(lsp-declaration) * :<C-U>call lsp#ui#vim#declaration(0)<CR>
+n  <Plug>(lsp-code-lens) * :<C-U>call lsp#ui#vim#code_lens()<CR>
+n  <Plug>(lsp-code-action-preview) * :<C-U>call lsp#ui#vim#code_action({ 'ui': 'preview' })<CR>
+n  <Plug>(lsp-code-action-float) * :<C-U>call lsp#ui#vim#code_action({ 'ui': 'float' })<CR>
+n  <Plug>(lsp-code-action) * :<C-U>call lsp#ui#vim#code_action({})<CR>
+n  <Plug>(lsp-call-hierarchy-outgoing) * :<C-U>call lsp#ui#vim#call_hierarchy_outgoing()<CR>
+n  <Plug>(lsp-call-hierarchy-incoming) * :<C-U>call lsp#ui#vim#call_hierarchy_incoming({})<CR>
+o  <Plug>(fzf-maps-o) * <C-C>:<C-U>call fzf#vim#maps('o', 0)<CR>
+x  <Plug>(fzf-maps-x) * :<C-U>call fzf#vim#maps('x', 0)<CR>
+n  <Plug>(fzf-maps-n) * :<C-U>call fzf#vim#maps('n', 0)<CR>
+n  <Plug>(fzf-normal) * <Nop>
+n  <Plug>(fzf-insert) * i
+n  <Plug>(ale_info_preview) * :ALEInfo -preview<CR>
+n  <Plug>(ale_info_clipboard) * :ALEInfo -clipboard<CR>
+n  <Plug>(ale_info_echo) * :ALEInfo -echo<CR>
+n  <Plug>(ale_info) * :ALEInfo<CR>
+n  <Plug>(ale_repeat_selection) * :ALERepeatSelection<CR>
+n  <Plug>(ale_code_action) * :ALECodeAction<CR>
+n  <Plug>(ale_filerename) * :ALEFileRename<CR>
+n  <Plug>(ale_rename) * :ALERename<CR>
+n  <Plug>(ale_import) * :ALEImport<CR>
+n  <Plug>(ale_documentation) * :ALEDocumentation<CR>
+n  <Plug>(ale_hover) * :ALEHover<CR>
+n  <Plug>(ale_find_references) * :ALEFindReferences<CR>
+n  <Plug>(ale_go_to_implementation_in_vsplit) * :ALEGoToImplementation -vsplit<CR>
+n  <Plug>(ale_go_to_implementation_in_split) * :ALEGoToImplementation -split<CR>
+n  <Plug>(ale_go_to_implementation_in_tab) * :ALEGoToImplementation -tab<CR>
+n  <Plug>(ale_go_to_implementation) * :ALEGoToImplementation<CR>
+n  <Plug>(ale_go_to_type_definition_in_vsplit) * :ALEGoToTypeDefinition -vsplit<CR>
+n  <Plug>(ale_go_to_type_definition_in_split) * :ALEGoToTypeDefinition -split<CR>
+n  <Plug>(ale_go_to_type_definition_in_tab) * :ALEGoToTypeDefinition -tab<CR>
+n  <Plug>(ale_go_to_type_definition) * :ALEGoToTypeDefinition<CR>
+n  <Plug>(ale_go_to_definition_in_vsplit) * :ALEGoToDefinition -vsplit<CR>
+n  <Plug>(ale_go_to_definition_in_split) * :ALEGoToDefinition -split<CR>
+n  <Plug>(ale_go_to_definition_in_tab) * :ALEGoToDefinition -tab<CR>
+n  <Plug>(ale_go_to_definition) * :ALEGoToDefinition<CR>
+n  <Plug>(ale_fix) * :ALEFix<CR>
+n  <Plug>(ale_detail) * :ALEDetail<CR>
+n  <Plug>(ale_lint) * :ALELint<CR>
+n  <Plug>(ale_reset_buffer) * :ALEResetBuffer<CR>
+n  <Plug>(ale_disable_buffer) * :ALEDisableBuffer<CR>
+n  <Plug>(ale_enable_buffer) * :ALEEnableBuffer<CR>
+n  <Plug>(ale_toggle_buffer) * :ALEToggleBuffer<CR>
+n  <Plug>(ale_reset) * :ALEReset<CR>
+n  <Plug>(ale_disable) * :ALEDisable<CR>
+n  <Plug>(ale_enable) * :ALEEnable<CR>
+n  <Plug>(ale_toggle) * :ALEToggle<CR>
+n  <Plug>(ale_last) * :ALELast<CR>
+n  <Plug>(ale_first) * :ALEFirst<CR>
+n  <Plug>(ale_next_wrap_warning) * :ALENext -wrap -warning<CR>
+n  <Plug>(ale_next_warning) * :ALENext -warning<CR>
+n  <Plug>(ale_next_wrap_error) * :ALENext -wrap -error<CR>
+n  <Plug>(ale_next_error) * :ALENext -error<CR>
+n  <Plug>(ale_next_wrap) * :ALENextWrap<CR>
+n  <Plug>(ale_next) * :ALENext<CR>
+n  <Plug>(ale_previous_wrap_warning) * :ALEPrevious -wrap -warning<CR>
+n  <Plug>(ale_previous_warning) * :ALEPrevious -warning<CR>
+n  <Plug>(ale_previous_wrap_error) * :ALEPrevious -wrap -error<CR>
+n  <Plug>(ale_previous_error) * :ALEPrevious -error<CR>
+n  <Plug>(ale_previous_wrap) * :ALEPreviousWrap<CR>
+n  <Plug>(ale_previous) * :ALEPrevious<CR>
+o  <Plug>(ale_show_completion_menu) * <Nop>
+v  <Plug>(ale_show_completion_menu) * <Nop>
+n  <Plug>(ale_show_completion_menu) * :call ale#completion#RestoreCompletionOptions()<CR>
+n  <M-Up>        :m .-2<CR>
+v  <M-Up>        :m '<-2<CR>
+v  <M-Down>      :m '>+1<CR>
+n  <M-Down>      :m .+1<CR>
+n  <S-F8>      * = :ALENextWrap<CR>
+n  <S-F11>     * :set guioptions +=m<CR>
+n  <F8>        * = :ALEFix<CR>
+n  <F4>        * :call ToggleNumber()<CR>
+n  <F3>        * :call StripWhitespace()<CR>
+n  <C-S>       * = :w<CR>
+n  <C-L>       * = <C-W>l
+n  <C-K>       * = <C-W>k
+n  <C-J>       * = <C-W>j
+n  <C-H>       * = <C-W>h
+n  <Plug>ManPreGetPage * :call dist#man#PreGetPage(0)<CR>
+
+E475: El argumento no es válido: 
+
+E475: El argumento no es válido: which-key.vim
+
+E194: No hay un nombre de archivo alterno que sustituya a '#'

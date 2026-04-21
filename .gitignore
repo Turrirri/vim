@@ -1,0 +1,8 @@
+*.swp
+.git/
+backups/
+plugged/json-formatter.vim
+undo/
+viminfo/
+vimswaps/
+view/
