@@ -24,6 +24,48 @@ set timeoutlen=400
 
 set signcolumn=yes
 set termguicolors
+set cc=80
+set display+=lastline
+set backup
+set writebackup
+set backupdir=~/.vim/backups//
+set directory=~/.vim/vimswaps//
+set grepprg=rg\ --vimgrep\ $*
+def LineNumberColors()
+      highlight LineNrAbove guifg=#51B3EC gui=bold
+      highlight LineNr      guifg=white   gui=bold
+      highlight LineNrBelow guifg=#99C1FC gui=bold  #99C1FC
+enddef
+call LineNumberColors()
+set path=.,,**
+hi MatchParen cterm=bold ctermfg=yellow
+if has("persistent_undo")
+    set undodir=~/.vim/undodir//
+    set undofile
+endif
+set viminfo='10,/10,h,<100,:100,%,n$HOME/.vim/viminfo/_viminfo
+if has('title') && (has('gui_running') || &title)
+      set titlestring=
+    set titlestring+=%f
+    set titlestring+=%h%m%r%w
+    set titlestring+=\ -\ %{v:progname}
+    set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}
+endif
+set autochdir
+set grepprg=rg\ --vimgrep\ $*
+nnoremap <leader>qq :qa!<CR>
+nnoremap <leader>qs :wq!<CR>
+" add useful stuff to title bar (file name, flags, cwd)
+" based on @factorylabs
+if has('title') && (has('gui_running') || &title)
+      set titlestring=
+    set titlestring+=%f
+    set titlestring+=%h%m%r%w
+    set titlestring+=\ -\ %{v:progname}
+    set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}
+endif
+
+
 
 " Tabs fallback
 set tabstop=4 shiftwidth=4 expandtab
@@ -61,8 +103,12 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 " UI
-Plug 'itchyny/lightline.vim'
-Plug 'morhetz/gruvbox'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'frazrepo/vim-rainbow'
+Plug 'ap/vim-css-color'
+Plug 'kshenoy/vim-signature'
+Plug 'tpope/vim-vinegar'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -72,6 +118,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'jiangmiao/auto-pairs'
+Plug 'yegappan/mru'
 
 " Markdown (lazy)
 Plug 'preservim/vim-markdown', { 'for': 'markdown' }
@@ -85,10 +132,6 @@ Plug 'stephpy/vim-yaml', { 'for': 'yaml' }
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'tbastos/vim-lua', { 'for': 'lua' }
 Plug 'bluz71/vim-nightfly-guicolors'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'frazrepo/vim-rainbow'
-Plug 'ap/vim-css-color'
 
 call plug#end()
 
@@ -111,6 +154,50 @@ set background=dark
 hi Normal guibg=NONE ctermbg=NONE
 packadd hlyank
 hi Normal guibg=NONE ctermbg=NONE
+nnoremap <leader>qq :qa!<CR>
+nnoremap <leader>qs :wq!<CR>
+nnoremap # #zz
+nnoremap * *zz
+nnoremap <C-h> = <C-w>h
+nnoremap <C-j> = <C-w>j
+nnoremap <C-k> = <C-w>k
+nnoremap <C-l> = <C-w>l
+nnoremap <C-s> = :w<CR>
+nnoremap <C-d> = <C-d>zz
+nnoremap <C-u> = <C-u>zz
+nnoremap <C-f> = <C-f>zz
+nnoremap <C-b> = <C-b>zz
+nnoremap <F2> :noh<return><CR>
+nnoremap <C-Up> :resize +2<CR>
+nnoremap <C-Down> :resize -2<CR>
+nnoremap <C-Left> :vertical resize -2<CR>
+nnoremap <C-Right> :vertical resize +2<CR>
+nnoremap g# g#zz
+nnoremap g* g*zz
+nnoremap gc BBE
+nnoremap j gj
+nnoremap k gk
+nnoremap <Leader>fv :vimgrep<space>
+nnoremap <Leader>tc :tabclose<CR>
+nnoremap <Leader>te :tabedit<space>
+nnoremap <Leader>tn :tabNext<CR>
+nnoremap <Leader>to :tabonly<CR>
+nnoremap <Leader>tp :tabprev<CR>
+nnoremap <Leader>w = :w !sudo tee > /dev/null %<CR>
+nnoremap n nzz
+nnoremap N Nzz
+vmap s S
+vnoremap / /\v
+"********************************************************
+"
+"           MOVING LINES UP AND DOWN
+"
+"********************************************************
+nmap <M-Down> :m .+1<CR>
+vmap <M-Down> :m '>+1<CR>
+vmap <M-Up> :m '<-2<CR>
+nmap <M-Up> :m .-2<CR>
+"********************************************************
 
 " ========================
 " 🔑 WHICH-KEY CONFIG
@@ -121,7 +208,8 @@ let g:which_key_map.f = {
       \ 'name' : '+file',
       \ 'f' : ['Files', 'find files'],
       \ 'g' : ['Rg', 'live grep'],
-      \ 'b' : ['Buffers', 'buffers']
+      \ 'b' : ['Buffers', 'buffers'],
+      \ 'r' : ['FZFMru' , 'Recent Files'],
       \ }
 
 let g:which_key_map.g = {
@@ -147,6 +235,16 @@ let g:which_key_map.s = {
       \ 'a': ['zg', 'add word']
       \ }
 
+let g:which_key_map.b = {
+      \ 'name' : '+buffer' ,
+      \ 'd' : ['bdelete' , 'borar buffer'],
+      \ 'f' : ['bfirst' , 'first-buffer'],
+      \ 'l' : ['blast' , 'last buffer'],
+      \ 'n' : ['bnext' , 'next-buffer'],
+      \ 'p' : ['bprevious' , 'previous-buffer'],
+      \ '?' : ['Buffers' , 'fzf-buffer'],
+      \ }
+
 call which_key#register('<Space>', "g:which_key_map")
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
@@ -156,6 +254,7 @@ nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 nnoremap <leader>ff :Files<CR>
 nnoremap <leader>fg :Rg<CR>
 nnoremap <leader>fb :Buffers<CR>
+nnoremap <F2> :noh<return><CR>
 
 " ========================
 " 📁 NERDTREE
@@ -186,6 +285,7 @@ augroup lang_settings
   autocmd FileType yaml setlocal tabstop=2 shiftwidth=2
   autocmd FileType lua setlocal tabstop=2 shiftwidth=2
   autocmd FileType markdown setlocal wrap linebreak spell
+  autocmd FileType text setlocal spell wrap paste
 augroup END
 
 " ========================
@@ -194,6 +294,15 @@ augroup END
 autocmd BufWritePre *.py silent! call CocAction('format')
 autocmd BufWritePre *.js silent! call CocAction('format')
 autocmd BufWritePre *.lua silent! call CocAction('format')
+autocmd BufEnter * :AirlineRefresh
+autocmd BufWrite * :lcd %:p:h
+" Source vim configuration file whenever it is saved
+if has('autocmd') " ignore this section if your vim does not support autocommands
+    augroup reload_vimrc
+        autocmd!
+        autocmd! BufWritePost $MYVIMRC,$MYGVIMRC nested source %
+    augroup END
+endif
 
 " ========================
 " 📝 MARKDOWN
@@ -206,3 +315,55 @@ nnoremap <leader>mp :MarkdownPreview<CR>
 if filereadable($HOME . '/.vimrc.local')
   source ~/.vimrc.local
 endif
+augroup EjecucionRapida
+    autocmd!
+    " Mapear F5 para ejecutar
+    autocmd FileType python,lua,javascript nnoremap <buffer> <F5> :call EjecutarArchivo()<CR>
+augroup END
+
+" --- Función para ejecutar código en terminal flotante ---
+function! EjecutarArchivo()
+    " Guardar el archivo automáticamente antes de ejecutar
+    silent! write
+    let l:file_type = &filetype
+    let l:file_name = expand('%:p')
+    let l:cmd = ''
+    " Definir el comando según el lenguaje
+    if l:file_type == 'python'
+        let l:cmd = 'python3 ' . l:file_name
+    elseif l:file_type == 'lua'
+        let l:cmd = 'lua ' . l:file_name
+    elseif l:file_type == 'javascript'
+        let l:cmd = 'node ' . l:file_name
+    else
+        echo "Tipo de archivo no soportado"
+        return
+    endif
+    " Configuración de dimensiones de la ventana (80% del editor)
+    let l:width = float2nr(&columns * 0.8)
+    let l:height = float2nr(&lines * 0.8)
+    let l:row = float2nr((&lines - l:height) / 2)
+    let l:col = float2nr((&columns - l:width) / 2)
+    if has('nvim')
+        " Configuración específica para Neovim (Ventana flotante)
+        let l:opts = {
+            \ 'relative': 'editor',
+            \ 'row': l:row,
+            \ 'col': l:col,
+            \ 'width': l:width,
+            \ 'height': l:height,
+            \ 'style': 'minimal',
+            \ 'border': 'rounded'
+            \ }
+        let l:buf = nvim_create_buf(v:false, v:true)
+        call nvim_open_win(l:buf, v:true, l:opts)
+        " Ejecutar y mapear cierre rápido en la terminal
+        execute 'terminal ' . l:cmd
+        startinsert " Entrar en modo insertar automáticamente
+        " Mapeo local para cerrar la ventana con 'q' cuando termine el proceso
+        nnoremap <buffer> q :q<CR>
+    else
+        " Alternativa para Vim clásico (Terminal en split inferior)
+        execute 'botright terminal ++shell ' . l:cmd
+    endif
+endfunction

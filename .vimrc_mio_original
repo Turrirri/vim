@@ -62,7 +62,7 @@ Plug 'mbbill/undotree'
 Plug 'ap/vim-css-color'
 Plug 'kshenoy/vim-signature'
 Plug 'tpope/vim-vinegar'
-.vim/.vimrc
+
 call plug#end()
 
 runtime /usr/share/vim/vim91/pack/dist/opt/justify/plugin/justify.vim /usr/share/vim/vim91/macros/matchit.vim
