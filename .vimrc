@@ -84,14 +84,33 @@ Plug 'maxmellon/vim-jsx-pretty', { 'for': ['javascript','typescript'] }
 Plug 'stephpy/vim-yaml', { 'for': 'yaml' }
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'tbastos/vim-lua', { 'for': 'lua' }
+Plug 'bluz71/vim-nightfly-guicolors'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'frazrepo/vim-rainbow'
+Plug 'ap/vim-css-color'
 
 call plug#end()
 
 " ========================
+" Plugin AirLine
+let g:airline_detect_modified=1
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#tabline#enabled = 1 " Enable the list of buffers
+let g:airline_powerline_fonts = 1
+"usando el plugin vin-rainbow
+let g:rainbow_active = 1
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+
+" ========================
 " 🎨 UI
 " ========================
-colorscheme gruvbox
+colorscheme nightfly
 set background=dark
+hi Normal guibg=NONE ctermbg=NONE
+packadd hlyank
+hi Normal guibg=NONE ctermbg=NONE
 
 " ========================
 " 🔑 WHICH-KEY CONFIG
