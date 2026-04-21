@@ -1,8 +1,8 @@
 *.swp
 .git/
 backups/
-plugged/json-formatter.vim
-undo/
+plugged/
+undodir/
 viminfo/
 vimswaps/
 view/
