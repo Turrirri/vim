@@ -1,3 +1,14 @@
+" instalar vim-plug si no existe, para el manejo de los plugins
+" Luego de ejecutar vim por primera vez, ejecutar dentro de vim:
+"
+" :CocInstall coc-pyright coc-tsserver coc-json coc-yaml coc-lua coc-sh
+"
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 " ========================
 " ⚙️ BASICS
 " ========================
@@ -76,7 +87,7 @@ let mapleader=" "
 " ========================
 " 🌍 SPELL (EN + ES)
 " ========================
-set spell
+"set spell
 set spelllang=en,es
 
 nnoremap <leader>ss :set spell!<CR>
