@@ -1,5 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =2
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/mnt/BACKUP/HOME'
+let g:netrw_dirhist_3='/home/jhonny/temp'
 let g:netrw_dirhist_2='/home/jhonny/.config'
 let g:netrw_dirhist_1='/home/jhonny'
 let g:netrw_dirhist_0='/home'
@@ -8,5 +10,3 @@ let g:netrw_dirhist_8='/home/jhonny/Documentos/Linux/KEYBINDINGS'
 let g:netrw_dirhist_7='/home/jhonny/.config'
 let g:netrw_dirhist_6='/home/jhonny/.dotfiles/yazi'
 let g:netrw_dirhist_5='/home/jhonny/Descargas'
-let g:netrw_dirhist_4='/home/jhonny/.dotfiles/fish'
-let g:netrw_dirhist_3='/home/jhonny/.dotfiles/fish/conf.d'

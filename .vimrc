@@ -17,6 +17,7 @@ set nocompatible
 
 filetype plugin indent on
 syntax on
+set runtimepath+=~/.vim/spell
 
 set number relativenumber
 set cursorline
@@ -42,12 +43,6 @@ set writebackup
 set backupdir=~/.vim/backups//
 set directory=~/.vim/vimswaps//
 set grepprg=rg\ --vimgrep\ $*
-def LineNumberColors()
-      highlight LineNrAbove guifg=#51B3EC gui=bold
-      highlight LineNr      guifg=white   gui=bold
-      highlight LineNrBelow guifg=#99C1FC gui=bold  #99C1FC
-enddef
-call LineNumberColors()
 set path=.,,**
 hi MatchParen cterm=bold ctermfg=yellow
 if has("persistent_undo")
@@ -178,7 +173,7 @@ nnoremap <C-d> = <C-d>zz
 nnoremap <C-u> = <C-u>zz
 nnoremap <C-f> = <C-f>zz
 nnoremap <C-b> = <C-b>zz
-nnoremap <F2> :noh<return><CR>
+nnoremap <silent><F2> :noh<return><CR>
 nnoremap <C-Up> :resize +2<CR>
 nnoremap <C-Down> :resize -2<CR>
 nnoremap <C-Left> :vertical resize -2<CR>
@@ -248,7 +243,7 @@ let g:which_key_map.s = {
 
 let g:which_key_map.b = {
       \ 'name' : '+buffer' ,
-      \ 'd' : ['bdelete' , 'borar buffer'],
+      \ 'd' : ['bdelete' , 'borrar buffer'],
       \ 'f' : ['bfirst' , 'first-buffer'],
       \ 'l' : ['blast' , 'last buffer'],
       \ 'n' : ['bnext' , 'next-buffer'],
@@ -296,7 +291,7 @@ augroup lang_settings
   autocmd FileType yaml setlocal tabstop=2 shiftwidth=2
   autocmd FileType lua setlocal tabstop=2 shiftwidth=2
   autocmd FileType markdown setlocal wrap linebreak spell
-  autocmd FileType text setlocal spell wrap paste
+  autocmd FileType text setlocal spell wrap 
 augroup END
 
 " ========================
@@ -378,3 +373,10 @@ function! EjecutarArchivo()
         execute 'botright terminal ++shell ' . l:cmd
     endif
 endfunction
+
+def LineNumberColors()
+      highlight LineNrAbove guifg=#51B3EC gui=bold
+      highlight LineNr      guifg=white   gui=bold
+      highlight LineNrBelow guifg=#99C1FC gui=bold  #99C1FC
+enddef
+call LineNumberColors()
