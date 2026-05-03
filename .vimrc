@@ -117,8 +117,8 @@ Plug 'kshenoy/vim-signature'
 Plug 'tpope/vim-vinegar'
 
 " Git
-Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
+"Plug 'tpope/vim-fugitive'
+"Plug 'airblade/vim-gitgutter'
 
 " Editing
 Plug 'tpope/vim-surround'
@@ -230,7 +230,8 @@ let g:which_key_map.l = {
       \ 'd' : ['call CocAction("definition")', 'definition'],
       \ 'r' : ['<Plug>(coc-rename)', 'rename'],
       \ 'f' : ['call CocAction("format")', 'format']
-      \ }
+      \ } 
+
 
 let g:which_key_map.n = ['NERDTreeToggle', 'file tree']
 let g:which_key_map.s = {
@@ -380,3 +381,31 @@ def LineNumberColors()
       highlight LineNrBelow guifg=#99C1FC gui=bold  #99C1FC
 enddef
 call LineNumberColors()
+
+" Usar <Tab> para navegar el autocompletado
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+
+function! CheckBackspace() abort
+    let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Ir a definición, implementación o referencias
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Mostrar documentación con K
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
