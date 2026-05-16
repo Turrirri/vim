@@ -1,4 +1,25 @@
-" instalar vim-plug si no existe, para el manejo de los plugins
+" Revisre existecia de directorios:
+" Definir los directorios que quieres asegurar
+let s:vim_dirs = [
+      \ $HOME . '/.vim/autoload',
+      \ $HOME . '/.vim/backupa',
+      \ $HOME . '/.vim/colors',
+      \ $HOME . '/.vim/spell',
+      \ $HOME . '/.vim/undodir',
+      \ $HOME . '/.vim/view',
+      \ $HOME . '/.vim/viminfo',
+      \ $HOME . '/.vim/vimswaps',
+      \ ]
+
+" Iterar sobre la lista y crearlos si no existen
+for dir in s:vim_dirs
+    if !isdirectory(dir)
+        call mkdir(dir, 'p', 0700)
+    endif
+endfor
+
+"
+"" instalar vim-plug si no existe, para el manejo de los plugins
 " Luego de ejecutar vim por primera vez, ejecutar dentro de vim:
 "
 " :CocInstall coc-pyright coc-tsserver coc-json coc-yaml coc-lua coc-sh
@@ -115,6 +136,7 @@ Plug 'frazrepo/vim-rainbow'
 Plug 'ap/vim-css-color'
 Plug 'kshenoy/vim-signature'
 Plug 'tpope/vim-vinegar'
+Plug 'Yggdroot/indentLine'
 
 " Git
 "Plug 'tpope/vim-fugitive'
@@ -123,12 +145,8 @@ Plug 'tpope/vim-vinegar'
 " Editing
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'jiangmiao/auto-pairs'
+"Plug 'jiangmiao/auto-pairs'
 Plug 'yegappan/mru'
-
-" Markdown (lazy)
-Plug 'preservim/vim-markdown', { 'for': 'markdown' }
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm install', 'for': 'markdown' }
 
 " Languages
 Plug 'vim-python/python-syntax', { 'for': 'python' }
@@ -159,8 +177,10 @@ colorscheme nightfly
 set background=dark
 hi Normal guibg=NONE ctermbg=NONE
 packadd hlyank
-hi Normal guibg=NONE ctermbg=NONE
+inoremap jk <esc>
 nnoremap <leader>qq :qa!<CR>
+nnoremap gl $
+nnoremap gh ^
 nnoremap <leader>qs :wq!<CR>
 nnoremap # #zz
 nnoremap * *zz
@@ -189,6 +209,7 @@ nnoremap <Leader>te :tabedit<space>
 nnoremap <Leader>tn :tabNext<CR>
 nnoremap <Leader>to :tabonly<CR>
 nnoremap <Leader>tp :tabprev<CR>
+nnoremap <Leader>tt :bel term<CR>
 nnoremap <Leader>w = :w !sudo tee > /dev/null %<CR>
 nnoremap n nzz
 nnoremap N Nzz
@@ -204,6 +225,16 @@ vmap <M-Down> :m '>+1<CR>
 vmap <M-Up> :m '<-2<CR>
 nmap <M-Up> :m .-2<CR>
 "********************************************************
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+let g:indentLine_setColors = 1
+
+" ========================
+"    Auto-Pairs
+" ========================
+imap ( ()<left>
+imap { {}<left>
+imap [ []<left>
+imap < <><left>
 
 " ========================
 " 🔑 WHICH-KEY CONFIG
@@ -230,7 +261,7 @@ let g:which_key_map.l = {
       \ 'd' : ['call CocAction("definition")', 'definition'],
       \ 'r' : ['<Plug>(coc-rename)', 'rename'],
       \ 'f' : ['call CocAction("format")', 'format']
-      \ } 
+      \ }
 
 
 let g:which_key_map.n = ['NERDTreeToggle', 'file tree']
@@ -292,7 +323,7 @@ augroup lang_settings
   autocmd FileType yaml setlocal tabstop=2 shiftwidth=2
   autocmd FileType lua setlocal tabstop=2 shiftwidth=2
   autocmd FileType markdown setlocal wrap linebreak spell
-  autocmd FileType text setlocal spell wrap 
+  autocmd FileType text setlocal spell wrap
 augroup END
 
 " ========================
@@ -310,11 +341,6 @@ if has('autocmd') " ignore this section if your vim does not support autocommand
         autocmd! BufWritePost $MYVIMRC,$MYGVIMRC nested source %
     augroup END
 endif
-
-" ========================
-" 📝 MARKDOWN
-" ========================
-nnoremap <leader>mp :MarkdownPreview<CR>
 
 " ========================
 " 🔒 LOCAL CONFIG
@@ -409,3 +435,19 @@ function! ShowDocumentation()
     call feedkeys('K', 'in')
   endif
 endfunction
+
+" --- Función para eliminar trailing whitespaces ---
+function! StripTrailingWhitespaces()
+    " Preparación: guardar posición actual del cursor y la búsqueda
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Ejecutar la sustitución: eliminar espacios al final de línea
+    %s/\s\+$//e
+    " Restaurar posición anterior y la búsqueda
+    let @/=_s
+    call cursor(l, c)
+endfunction
+
+" --- Asociar la función a la tecla F10 (en modo Normal) ---
+nnoremap <F10> :call StripTrailingWhitespaces()<CR>
