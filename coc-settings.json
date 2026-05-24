@@ -10,5 +10,6 @@
         }
       }
   }
-}
+},
+"clangd.path": "~/.dotfiles/coc/extensions/coc-clangd-data/install/22.1.0/clangd_22.1.0/bin/clangd"
 }

@@ -2,7 +2,7 @@
 " Definir los directorios que quieres asegurar
 let s:vim_dirs = [
       \ $HOME . '/.vim/autoload',
-      \ $HOME . '/.vim/backupa',
+      \ $HOME . '/.vim/backups',
       \ $HOME . '/.vim/colors',
       \ $HOME . '/.vim/spell',
       \ $HOME . '/.vim/undodir',
@@ -179,6 +179,7 @@ hi Normal guibg=NONE ctermbg=NONE
 packadd hlyank
 inoremap jk <esc>
 nnoremap <leader>qq :qa!<CR>
+nnoremap <silent><CR> :noh<CR>
 nnoremap gl $
 nnoremap gh ^
 nnoremap <leader>qs :wq!<CR>
