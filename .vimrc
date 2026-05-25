@@ -43,7 +43,7 @@ set runtimepath+=~/.vim/spell
 set number relativenumber
 set cursorline
 set hidden
-set wrap linebreak
+set linebreak
 set scrolloff=8 sidescrolloff=8
 
 set clipboard=unnamedplus
@@ -57,7 +57,6 @@ set timeoutlen=400
 
 set signcolumn=yes
 set termguicolors
-set cc=80
 set display+=lastline
 set backup
 set writebackup
@@ -91,7 +90,9 @@ if has('title') && (has('gui_running') || &title)
     set titlestring+=\ -\ %{v:progname}
     set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}
 endif
-
+set nowrap
+set textwidth=0
+set wrapmargin=0
 
 
 " Tabs fallback
@@ -323,8 +324,12 @@ augroup lang_settings
   autocmd FileType javascript setlocal tabstop=2 shiftwidth=2
   autocmd FileType yaml setlocal tabstop=2 shiftwidth=2
   autocmd FileType lua setlocal tabstop=2 shiftwidth=2
-  autocmd FileType markdown setlocal wrap linebreak spell
-  autocmd FileType text setlocal spell wrap
+augroup END
+
+" Configuración específica para archivos de texto plano y Markdown
+augroup TextWrap
+  autocmd!
+  autocmd FileType text,markdown setlocal wrap linebreak | setlocal colorcolumn=80
 augroup END
 
 " ========================
