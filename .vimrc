@@ -1,4 +1,4 @@
-" Revisre existecia de directorios:
+" Revisar existecia de directorios:
 " Definir los directorios que quieres asegurar
 let s:vim_dirs = [
       \ $HOME . '/.vim/autoload',
@@ -64,19 +64,13 @@ set backupdir=~/.vim/backups//
 set directory=~/.vim/vimswaps//
 set grepprg=rg\ --vimgrep\ $*
 set path=.,,**
+set wildmenu
 hi MatchParen cterm=bold ctermfg=yellow
 if has("persistent_undo")
     set undodir=~/.vim/undodir//
     set undofile
 endif
 set viminfo='10,/10,h,<100,:100,%,n$HOME/.vim/viminfo/_viminfo
-if has('title') && (has('gui_running') || &title)
-      set titlestring=
-    set titlestring+=%f
-    set titlestring+=%h%m%r%w
-    set titlestring+=\ -\ %{v:progname}
-    set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}
-endif
 set autochdir
 set grepprg=rg\ --vimgrep\ $*
 nnoremap <leader>qq :qa!<CR>
@@ -84,7 +78,7 @@ nnoremap <leader>qs :wq!<CR>
 " add useful stuff to title bar (file name, flags, cwd)
 " based on @factorylabs
 if has('title') && (has('gui_running') || &title)
-      set titlestring=
+    set titlestring=
     set titlestring+=%f
     set titlestring+=%h%m%r%w
     set titlestring+=\ -\ %{v:progname}
@@ -146,7 +140,7 @@ Plug 'Yggdroot/indentLine'
 " Editing
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-"Plug 'jiangmiao/auto-pairs'
+Plug 'jiangmiao/auto-pairs'
 Plug 'yegappan/mru'
 
 " Languages
@@ -161,9 +155,19 @@ Plug 'bluz71/vim-nightfly-guicolors'
 call plug#end()
 
 " ========================
+" 🎨 UI
+" ========================
+colorscheme catppuccin
+set background=dark
+hi Normal guibg=NONE ctermbg=NONE
+packadd hlyank
+
+" ========================
 " Plugin AirLine
+" ========================
 let g:airline_detect_modified=1
 let g:airline#extensions#ale#enabled = 1
+let g:airline_theme='jellybeans'
 let g:airline#extensions#tabline#enabled = 1 " Enable the list of buffers
 let g:airline_powerline_fonts = 1
 "usando el plugin vin-rainbow
@@ -172,12 +176,8 @@ let g:rbpt_max = 16
 let g:rbpt_loadcmd_toggle = 0
 
 " ========================
-" 🎨 UI
+" KEY MAPPINGS
 " ========================
-colorscheme nightfly
-set background=dark
-hi Normal guibg=NONE ctermbg=NONE
-packadd hlyank
 inoremap jk <esc>
 nnoremap <leader>qq :qa!<CR>
 nnoremap <silent><CR> :noh<CR>
@@ -227,16 +227,8 @@ vmap <M-Down> :m '>+1<CR>
 vmap <M-Up> :m '<-2<CR>
 nmap <M-Up> :m .-2<CR>
 "********************************************************
-let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-let g:indentLine_setColors = 1
-
-" ========================
-"    Auto-Pairs
-" ========================
-imap ( ()<left>
-imap { {}<left>
-imap [ []<left>
-imap < <><left>
+let g:indentLine_char_list = ['┊', '¦', '┆', '│']
+let g:indentLine_setColors = 0
 
 " ========================
 " 🔑 WHICH-KEY CONFIG
@@ -294,7 +286,6 @@ nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 nnoremap <leader>ff :Files<CR>
 nnoremap <leader>fg :Rg<CR>
 nnoremap <leader>fb :Buffers<CR>
-nnoremap <F2> :noh<return><CR>
 
 " ========================
 " 📁 NERDTREE
