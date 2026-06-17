@@ -123,7 +123,9 @@ Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 " FZF
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-
+if !has('nvim')
+    Plug 'rhysd/vim-healthcheck'
+endif
 " UI
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -157,7 +159,7 @@ call plug#end()
 " ========================
 " 🎨 UI
 " ========================
-colorscheme catppuccin
+colorscheme nightfly
 set background=dark
 hi Normal guibg=NONE ctermbg=NONE
 packadd hlyank
@@ -181,6 +183,7 @@ let g:rbpt_loadcmd_toggle = 0
 inoremap jk <esc>
 nnoremap <leader>qq :qa!<CR>
 nnoremap <silent><CR> :noh<CR>
+nnoremap ; :Buffers<CR>
 nnoremap gl $
 nnoremap gh ^
 nnoremap <leader>qs :wq!<CR>
