@@ -115,9 +115,6 @@ nnoremap <leader>sa zg
 " ========================
 call plug#begin('~/.vim/plugged')
 
-" Kanagawa colors
-Plug 'menisadi/kanagawa.vim'
-
 " Mini MAP
 Plug 'severin-lemaignan/vim-minimap'
 
@@ -169,7 +166,7 @@ call plug#end()
 " ========================
 " 🎨 UI
 " ========================
-colorscheme kanagawa
+colorscheme nightfly
 set background=dark
 hi Normal guibg=NONE ctermbg=NONE
 packadd hlyank
