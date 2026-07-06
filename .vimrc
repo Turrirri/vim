@@ -20,6 +20,10 @@ endfor
 
 "
 "" instalar vim-plug si no existe, para el manejo de los plugins
+
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+"
 " Luego de ejecutar vim por primera vez, ejecutar dentro de vim:
 "
 " :CocInstall coc-pyright coc-tsserver coc-json coc-yaml coc-lua coc-sh
@@ -111,6 +115,12 @@ nnoremap <leader>sa zg
 " ========================
 call plug#begin('~/.vim/plugged')
 
+" Kanagawa colors
+Plug 'menisadi/kanagawa.vim'
+
+" Mini MAP
+Plug 'severin-lemaignan/vim-minimap'
+
 " LSP
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -159,10 +169,13 @@ call plug#end()
 " ========================
 " 🎨 UI
 " ========================
-colorscheme nightfly
+colorscheme kanagawa
 set background=dark
 hi Normal guibg=NONE ctermbg=NONE
 packadd hlyank
+
+" MiniMAP
+let g:minimap_highlight='Visual'
 
 " ========================
 " Plugin AirLine
@@ -182,7 +195,6 @@ let g:rbpt_loadcmd_toggle = 0
 " ========================
 inoremap jk <esc>
 nnoremap <leader>qq :qa!<CR>
-nnoremap <silent><CR> :noh<CR>
 nnoremap ; :Buffers<CR>
 nnoremap gl $
 nnoremap gh ^
@@ -198,7 +210,7 @@ nnoremap <C-d> = <C-d>zz
 nnoremap <C-u> = <C-u>zz
 nnoremap <C-f> = <C-f>zz
 nnoremap <C-b> = <C-b>zz
-nnoremap <silent><F2> :noh<return><CR>
+nnoremap <silent><F2> :noh<CR>
 nnoremap <C-Up> :resize +2<CR>
 nnoremap <C-Down> :resize -2<CR>
 nnoremap <C-Left> :vertical resize -2<CR>
