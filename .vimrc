@@ -332,7 +332,7 @@ augroup END
 " Configuración específica para archivos de texto plano y Markdown
 augroup TextWrap
   autocmd!
-  autocmd FileType text,markdown setlocal wrap linebreak | setlocal colorcolumn=80
+  autocmd FileType text,markdown setlocal wrap linebreak textwidth=80 formatoptions+=ta
 augroup END
 
 " ========================
