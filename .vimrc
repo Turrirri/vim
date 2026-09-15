@@ -1,6 +1,5 @@
-" ============================================================================
-" 📁 DIRECTORIOS
-" ============================================================================
+" Revisar existecia de directorios:
+" Definir los directorios que quieres asegurar
 let s:vim_dirs = [
       \ $HOME . '/.vim/autoload',
       \ $HOME . '/.vim/backups',
@@ -12,68 +11,35 @@ let s:vim_dirs = [
       \ $HOME . '/.vim/vimswaps',
       \ ]
 
+" Iterar sobre la lista y crearlos si no existen
 for dir in s:vim_dirs
     if !isdirectory(dir)
         call mkdir(dir, 'p', 0700)
     endif
 endfor
 
-" ============================================================================
-" 📦 VIM-PLUG SETUP
-" ============================================================================
+"
+"" instalar vim-plug si no existe, para el manejo de los plugins
+
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+"
+" Luego de ejecutar vim por primera vez, ejecutar dentro de vim:
+"
+" :CocInstall coc-pyright coc-tsserver coc-json coc-yaml coc-lua coc-sh
+"
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-call plug#begin('~/.vim/plugged')
-
-" General & UI
-Plug 'severin-lemaignan/vim-minimap'
-Plug 'liuchengxu/vim-which-key'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'frazrepo/vim-rainbow'
-Plug 'ap/vim-css-color'
-Plug 'kshenoy/vim-signature'
-Plug 'tpope/vim-vinegar'
-Plug 'Yggdroot/indentLine'
-Plug 'bluz71/vim-nightfly-guicolors'
-
-" File Explorer & Navigation
-Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'yegappan/mru'
-if !has('nvim')
-    Plug 'rhysd/vim-healthcheck'
-endif
-
-" LSP (COC)
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-" Editing
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
-Plug 'jiangmiao/auto-pairs'
-
-" Syntax / Languages
-Plug 'vim-python/python-syntax', { 'for': 'python' }
-Plug 'pangloss/vim-javascript', { 'for': ['javascript','typescript'] }
-Plug 'maxmellon/vim-jsx-pretty', { 'for': ['javascript','typescript'] }
-Plug 'stephpy/vim-yaml', { 'for': 'yaml' }
-Plug 'cespare/vim-toml', { 'for': 'toml' }
-Plug 'tbastos/vim-lua', { 'for': 'lua' }
-
-call plug#end()
-
-" ============================================================================
-" ⚙️ BASICS & CONFIGURACIÓN
-" ============================================================================
-let mapleader = " "
-
+" ========================
+" ⚙️ BASICS
+" ========================
 set encoding=utf-8
+set nocompatible
+
 filetype plugin indent on
 syntax on
 set runtimepath+=~/.vim/spell
@@ -83,9 +49,6 @@ set cursorline
 set hidden
 set linebreak
 set scrolloff=8 sidescrolloff=8
-set nowrap
-set textwidth=0
-set wrapmargin=0
 
 set clipboard=unnamedplus
 set mouse=a
@@ -99,243 +62,250 @@ set timeoutlen=400
 set signcolumn=yes
 set termguicolors
 set display+=lastline
-
 set backup
 set writebackup
 set backupdir=~/.vim/backups//
 set directory=~/.vim/vimswaps//
+set grepprg=rg\ --vimgrep\ $*
+set path=.,,**
+set wildmenu
+hi MatchParen cterm=bold ctermfg=yellow
 if has("persistent_undo")
     set undodir=~/.vim/undodir//
     set undofile
 endif
 set viminfo='10,/10,h,<100,:100,%,n$HOME/.vim/viminfo/_viminfo
-
-set grepprg=rg\ --vimgrep\ $*
-set path=.,,**
-set wildmenu
 set autochdir
+set grepprg=rg\ --vimgrep\ $*
+" add useful stuff to title bar (file name, flags, cwd)
+" based on @factorylabs
+if has('title') && (has('gui_running') || &title)
+    set titlestring=
+    set titlestring+=%f
+    set titlestring+=%h%m%r%w
+    set titlestring+=\ -\ %{v:progname}
+    set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}
+endif
+set nowrap
+set textwidth=0
+set wrapmargin=0
 
+
+" Tabs fallback
 set tabstop=4 shiftwidth=4 expandtab
+
+" Leader
+let mapLeader=" "
+
+" ========================
+" 🌍 SPELL (EN + ES)
+" ========================
+"set spell
 set spelllang=en,es
 
-if has('title') && (has('gui_running') || &title)
-    set titlestring=%f%h%m%r%w\ -\ %{v:progname}\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}
-endif
 
-" ============================================================================
-" 🎨 APARIENCIA & UI
-" ============================================================================
+" ========================
+" 📦 PLUGINS (lazy-ish)
+" ========================
+call plug#begin('~/.vim/plugged')
+
+" Mini MAP
+Plug 'severin-lemaignan/vim-minimap'
+
+" LSP
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" File explorer (lazy)
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
+
+" FZF
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+if !has('nvim')
+    Plug 'rhysd/vim-healthcheck'
+endif
+" UI
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'frazrepo/vim-rainbow'
+Plug 'ap/vim-css-color'
+Plug 'kshenoy/vim-signature'
+Plug 'tpope/vim-vinegar'
+Plug 'Yggdroot/indentLine'
+
+" Git
+"Plug 'tpope/vim-fugitive'
+"Plug 'airblade/vim-gitgutter'
+
+" Editing
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'jiangmiao/auto-pairs'
+Plug 'yegappan/mru'
+
+" Languages
+Plug 'vim-python/python-syntax', { 'for': 'python' }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript','typescript'] }
+Plug 'maxmellon/vim-jsx-pretty', { 'for': ['javascript','typescript'] }
+Plug 'stephpy/vim-yaml', { 'for': 'yaml' }
+Plug 'cespare/vim-toml', { 'for': 'toml' }
+Plug 'tbastos/vim-lua', { 'for': 'lua' }
+Plug 'bluz71/vim-nightfly-guicolors'
+
+call plug#end()
+
+" ========================
+" 🎨 UI
+" ========================
 colorscheme nightfly
 set background=dark
 hi Normal guibg=NONE ctermbg=NONE
-hi MatchParen cterm=bold ctermfg=yellow
+packadd hlyank
 
-let g:minimap_highlight = 'Visual'
-let g:airline_detect_modified = 1
+" MiniMAP
+let g:minimap_highlight='Visual'
+
+" ========================
+" Plugin AirLine
+" ========================
+let g:airline_detect_modified=1
 let g:airline#extensions#ale#enabled = 1
-let g:airline_theme = 'jellybeans'
-let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='jellybeans'
+let g:airline#extensions#tabline#enabled = 1 " Enable the list of buffers
 let g:airline_powerline_fonts = 1
-
+"usando el plugin vin-rainbow
 let g:rainbow_active = 1
 let g:rbpt_max = 16
 let g:rbpt_loadcmd_toggle = 0
 
-let g:indentLine_char_list = ['┊', '¦', '┆', '│']
-let g:indentLine_setColors = 0
-
-def LineNumberColors()
-      highlight LineNrAbove guifg=#51B3EC gui=bold
-      highlight LineNr      guifg=white   gui=bold
-      highlight LineNrBelow guifg=#99C1FC gui=bold
-enddef
-call LineNumberColors()
-
-" ============================================================================
-" ⌨️ MAPEOS BÁSICOS
-" ============================================================================
+" ========================
+" KEY MAPPINGS
+" ========================
 inoremap jk <esc>
-
-" Navegación y Centrado
+nnoremap ; :Buffers<CR>
 nnoremap gl $
 nnoremap gh ^
 nnoremap # #zz
 nnoremap * *zz
-nnoremap g# g#zz
-nnoremap g* g*zz
-nnoremap n nzz
-nnoremap N Nzz
-nnoremap <C-d> <C-d>zz
-nnoremap <C-u> <C-u>zz
-nnoremap <C-f> <C-f>zz
-nnoremap <C-b> <C-b>zz
-nnoremap j gj
-nnoremap k gk
-nnoremap gc BBE
-vnoremap / /\v
-
-" Accesos directos rápidos
-nnoremap ; :Buffers<CR>
+nnoremap <C-h> = <C-w>h
+nnoremap <C-j> = <C-w>j
+nnoremap <C-k> = <C-w>k
+nnoremap <C-l> = <C-w>l
+nnoremap <C-s> = :w<CR>
+nnoremap <C-d> = <C-d>zz
+nnoremap <C-u> = <C-u>zz
+nnoremap <C-f> = <C-f>zz
+nnoremap <C-b> = <C-b>zz
 nnoremap <silent><F2> :noh<CR>
-nnoremap <C-s> :w<CR>
-nnoremap <F10> :call StripTrailingWhitespaces()<CR>
-
-" Mover ventanas
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-
-" Redimensionar ventanas
 nnoremap <C-Up> :resize +2<CR>
 nnoremap <C-Down> :resize -2<CR>
 nnoremap <C-Left> :vertical resize -2<CR>
 nnoremap <C-Right> :vertical resize +2<CR>
-
-" Mover líneas arriba/abajo
+nnoremap g# g#zz
+nnoremap g* g*zz
+nnoremap gc BBE
+nnoremap j gj
+nnoremap k gk
+nnoremap <Leader>fb :Buffers<CR>
+nnoremap <Leader>ff :Files<CR>
+nnoremap <Leader>fg :Rg<CR>
+nnoremap <Leader>fr :FZFMru<CR>
+nnoremap <Leader>fv :vimgrep<space>
+nnoremap <Leader>lf :call CocAction('format')<CR>
+nnoremap <Leader>n :NERDTreeToggle<CR>
+nnoremap <Leader>qq :qa!<CR>
+nnoremap <Leader>qs :wq!<CR>
+nnoremap <Leader>rn <Plug>(coc-rename)
+nnoremap <Leader>sa zg
+nnoremap <Leader>sn ]s
+nnoremap <Leader>sp [s
+nnoremap <Leader>ss :set spell!<CR>
+nnoremap <Leader>tc :tabclose<CR>
+nnoremap <Leader>te :tabedit<space>
+nnoremap <Leader>tn :tabNext<CR>
+nnoremap <Leader>to :tabonly<CR>
+nnoremap <Leader>tp :tabprev<CR>
+nnoremap <Leader>tt :bel term<CR>
+nnoremap <Leader>w = :w !sudo tee > /dev/null %<CR>
+nnoremap n nzz
+nnoremap N Nzz
+vmap s S
+vnoremap / /\v
+"********************************************************
+"
+"           MOVING LINES UP AND DOWN
+"
+"********************************************************
 nmap <M-Down> :m .+1<CR>
-nmap <M-Up> :m .-2<CR>
 vmap <M-Down> :m '>+1<CR>
 vmap <M-Up> :m '<-2<CR>
+nmap <M-Up> :m .-2<CR>
+"********************************************************
+let g:indentLine_char_list = ['┊', '¦', '┆', '│']
+let g:indentLine_setColors = 0
 
-" COC Autocompletado con <Tab>
 inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
+      \ coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
+
 inoremap <silent><expr> <S-TAB>
       \ coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1] =~# '\s'
-endfunction
+nnoremap <silent> gd <Plug>(coc-definition)
+nnoremap <silent> K :call CocActionAsync('doHover')<CR>
 
-" ============================================================================
-" 🔑 WHICH-KEY CONFIGURATION (Espacio / Leader)
-" ============================================================================
-let g:which_key_map = {}
-
-" Estructura de grupos
-let g:which_key_map.b = {
-      \ 'name' : '+buffer',
-      \ 'd' : ['bdelete',     'borrar buffer'],
-      \ 'f' : ['bfirst',      'primer buffer'],
-      \ 'l' : ['blast',       'último buffer'],
-      \ 'n' : ['bnext',       'siguiente buffer'],
-      \ 'p' : ['bprevious',   'anterior buffer'],
-      \ '?' : ['Buffers',     'buscar buffers (fzf)'],
-      \ }
-
-let g:which_key_map.f = {
-      \ 'name' : '+file/find',
-      \ 'f' : ['Files',       'buscar archivos'],
-      \ 'g' : ['Rg',          'live grep'],
-      \ 'b' : ['Buffers',     'buffers abiertos'],
-      \ 'r' : ['FZFMru',      'archivos recientes'],
-      \ 'v' : ['vimgrep',     'vimgrep'],
-      \ }
-
-let g:which_key_map.l = {
-      \ 'name' : '+lsp/coc',
-      \ 'd' : ['<Plug>(coc-definition)',     'ir a definición'],
-      \ 't' : ['<Plug>(coc-type-definition)','definición de tipo'],
-      \ 'i' : ['<Plug>(coc-implementation)', 'implementación'],
-      \ 'r' : ['<Plug>(coc-references)',     'referencias'],
-      \ 'n' : ['<Plug>(coc-rename)',         'renombrar variable'],
-      \ 'f' : ['call CocAction("format")',  'formatear código'],
-      \ 'k' : ['call ShowDocumentation()',   'mostrar documentación'],
-      \ }
-
-let g:which_key_map.q = {
-      \ 'name' : '+quit/session',
-      \ 'q' : ['qa!',         'salir sin guardar'],
-      \ 's' : ['wqa!',         'guardar y salir'],
-      \ }
-
-let g:which_key_map.s = {
-      \ 'name': '+spell',
-      \ 's': ['set spell!',  'alternar ortografía'],
-      \ 'n': [']s',          'siguiente error'],
-      \ 'p': ['[s',          'error anterior'],
-      \ 'a': ['zg',          'añadir palabra'],
-      \ }
-
-let g:which_key_map.t = {
-      \ 'name' : '+tabs/terminal',
-      \ 'c' : ['tabclose',   'cerrar pestaña'],
-      \ 'e' : ['tabedit',    'nueva pestaña'],
-      \ 'n' : ['tabNext',    'siguiente pestaña'],
-      \ 'o' : ['tabonly',    'cerrar las demás'],
-      \ 'p' : ['tabprev',    'pestaña anterior'],
-      \ 't' : ['bel term',   'abrir terminal abajo'],
-      \ }
-
-" Accesos directos individuales en Leader
-let g:which_key_map.n = ['NERDTreeToggle',                     'árbol de archivos']
-let g:which_key_map.w = ['w !sudo tee > /dev/null %',          'guardar como sudo']
-
-" Registrar which-key
-call which_key#register('<Space>', "g:which_key_map")
-nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
-vnoremap <silent> <leader> :WhichKeyVisual '<Space>'<CR>
-
-" ============================================================================
-" 🛠️ AUTOCMD & FUNCIONES
-" ============================================================================
+" ========================
+" 🧠 LANGUAGE SETTINGS
+" ========================
 augroup lang_settings
   autocmd!
   autocmd FileType python setlocal tabstop=4 shiftwidth=4 expandtab
-  autocmd FileType javascript,typescript,yaml,lua setlocal tabstop=2 shiftwidth=2 expandtab
+  autocmd FileType javascript setlocal tabstop=2 shiftwidth=2
+  autocmd FileType yaml setlocal tabstop=2 shiftwidth=2
+  autocmd FileType lua setlocal tabstop=2 shiftwidth=2
+augroup END
+
+" Configuración específica para archivos de texto plano y Markdown
+augroup TextWrap
+  autocmd!
   autocmd FileType text,markdown setlocal wrap linebreak textwidth=80 formatoptions+=ta
 augroup END
 
-augroup auto_format
-  autocmd!
-  autocmd BufWritePre *.py,*.js,*.lua silent! call CocAction('format')
-augroup END
+" ========================
+" 🧹 AUTOFORMAT
+" ========================
+autocmd BufWritePre *.py silent! call CocAction('format')
+autocmd BufWritePre *.js silent! call CocAction('format')
+autocmd BufWritePre *.lua silent! call CocAction('format')
+autocmd BufEnter * :AirlineRefresh
+autocmd BufWrite * :lcd %:p:h
+" Source vim configuration file whenever it is saved
+if has('autocmd') " ignore this section if your vim does not support autocommands
+    augroup reload_vimrc
+        autocmd!
+        autocmd! BufWritePost $MYVIMRC,$MYGVIMRC nested source %
+    augroup END
+endif
 
-augroup vim_ui_events
-  autocmd!
-  autocmd BufEnter * :AirlineRefresh
-  autocmd BufWrite * :lcd %:p:h
-augroup END
-
-augroup reload_vimrc
-  autocmd!
-  autocmd BufWritePost $MYVIMRC,$MYGVIMRC nested source %
-augroup END
-
+" ========================
+" 🔒 LOCAL CONFIG
+" ========================
+if filereadable($HOME . '/.vimrc.local')
+  source ~/.vimrc.local
+endif
 augroup EjecucionRapida
-  autocmd!
-  autocmd FileType python,lua,javascript nnoremap <buffer> <F5> :call EjecutarArchivo()<CR>
+    autocmd!
+    " Mapear F5 para ejecutar
+    autocmd FileType python,lua,javascript nnoremap <buffer> <F5> :call EjecutarArchivo()<CR>
 augroup END
 
-" Documentación COC
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
-
-" Limpieza de espacios al final de línea
-function! StripTrailingWhitespaces()
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    %s/\s\+$//e
-    let @/=_s
-    call cursor(l, c)
-endfunction
-
-" Ejecutar código en ventana flotante o split
+" --- Función para ejecutar código en terminal flotante ---
 function! EjecutarArchivo()
+    " Guardar el archivo automáticamente antes de ejecutar
     silent! write
     let l:file_type = &filetype
     let l:file_name = expand('%:p')
     let l:cmd = ''
+    " Definir el comando según el lenguaje
     if l:file_type == 'python'
         let l:cmd = 'python3 ' . l:file_name
     elseif l:file_type == 'lua'
@@ -346,13 +316,13 @@ function! EjecutarArchivo()
         echo "Tipo de archivo no soportado"
         return
     endif
-
+    " Configuración de dimensiones de la ventana (80% del editor)
     let l:width = float2nr(&columns * 0.8)
     let l:height = float2nr(&lines * 0.8)
     let l:row = float2nr((&lines - l:height) / 2)
     let l:col = float2nr((&columns - l:width) / 2)
-
     if has('nvim')
+        " Configuración específica para Neovim (Ventana flotante)
         let l:opts = {
             \ 'relative': 'editor',
             \ 'row': l:row,
@@ -364,10 +334,64 @@ function! EjecutarArchivo()
             \ }
         let l:buf = nvim_create_buf(v:false, v:true)
         call nvim_open_win(l:buf, v:true, l:opts)
+        " Ejecutar y mapear cierre rápido en la terminal
         execute 'terminal ' . l:cmd
-        startinsert
+        startinsert " Entrar en modo insertar automáticamente
+        " Mapeo local para cerrar la ventana con 'q' cuando termine el proceso
         nnoremap <buffer> q :q<CR>
     else
+        " Alternativa para Vim clásico (Terminal en split inferior)
         execute 'botright terminal ++shell ' . l:cmd
     endif
 endfunction
+
+def LineNumberColors()
+      highlight LineNrAbove guifg=#51B3EC gui=bold
+      highlight LineNr      guifg=white   gui=bold
+      highlight LineNrBelow guifg=#99C1FC gui=bold  #99C1FC
+enddef
+call LineNumberColors()
+
+" Usar <Tab> para navegar el autocompletado
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+
+function! CheckBackspace() abort
+    let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Ir a definición, implementación o referencias
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Mostrar documentación con K
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" --- Función para eliminar trailing whitespaces ---
+function! StripTrailingWhitespaces()
+    " Preparación: guardar posición actual del cursor y la búsqueda
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Ejecutar la sustitución: eliminar espacios al final de línea
+    %s/\s\+$//e
+    " Restaurar posición anterior y la búsqueda
+    let @/=_s
+    call cursor(l, c)
+endfunction
+
+" --- Asociar la función a la tecla F10 (en modo Normal) ---
+nnoremap <F10> :call StripTrailingWhitespaces()<CR>
