@@ -146,6 +146,7 @@ Plug 'frazrepo/vim-rainbow'
 Plug 'ap/vim-css-color'
 Plug 'kshenoy/vim-signature'
 Plug 'Yggdroot/indentLine'
+Plug 'catppuccin/vim', { 'as': 'catppuccin', 'branch': 'main' }
 
 " ---------------------------------------------------------------------------
 " Navegación / búsqueda
@@ -195,7 +196,7 @@ call plug#end()
 " 9. TEMA / UI
 " ============================================================================
 set background=dark
-colorscheme nightfly
+colorscheme catppuccin
 
 highlight Normal guibg=NONE ctermbg=NONE
 
@@ -206,7 +207,7 @@ highlight MatchParen
       \ ctermfg=yellow
 
 let g:airline_detect_modified = 1
-let g:airline_theme = 'jellybeans'
+let g:airline_theme = 'catppuccin_mocha'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
@@ -235,7 +236,7 @@ let maplocalleader = ','
 inoremap jk <Esc>
 
 " Limpiar búsqueda
-nnoremap <silent> <Esc><Esc> :nohlsearch<CR>
+nnoremap <silent><F2> :nohlsearch<CR>
 
 " Movimiento visual por líneas
 nnoremap j gj
@@ -362,7 +363,7 @@ nnoremap <leader>sp [s
 " 17. TABS
 " ============================================================================
 nnoremap <leader>tc :tabclose<CR>
-nnoremap <leader>te :tabedit 
+nnoremap <leader>te :tabedit
 nnoremap <leader>tn :tabnext<CR>
 nnoremap <leader>to :tabonly<CR>
 nnoremap <leader>tp :tabprevious<CR>
@@ -422,7 +423,7 @@ augroup END
 " ============================================================================
 augroup LangSettings
   autocmd!
-  
+
   autocmd FileType python
         \ setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 
