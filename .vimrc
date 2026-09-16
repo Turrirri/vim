@@ -1,5 +1,14 @@
-" Revisar existecia de directorios:
-" Definir los directorios que quieres asegurar
+"
+" ============================================================================
+" ~/.vimrc — Vim optimizado
+" ============================================================================
+" Pensado para Vim clásico + vim-plug + CoC.
+" No depende de Neovim.
+"
+
+" ============================================================================
+" 1. DIRECTORIOS DE VIM
+" ============================================================================
 let s:vim_dirs = [
       \ $HOME . '/.vim/autoload',
       \ $HOME . '/.vim/backups',
@@ -11,368 +20,325 @@ let s:vim_dirs = [
       \ $HOME . '/.vim/vimswaps',
       \ ]
 
-" Iterar sobre la lista y crearlos si no existen
 for dir in s:vim_dirs
-    if !isdirectory(dir)
-        call mkdir(dir, 'p', 0700)
-    endif
+  if !isdirectory(dir)
+    call mkdir(dir, 'p', 0700)
+  endif
 endfor
+unlet s:vim_dirs
 
-"
-"" instalar vim-plug si no existe, para el manejo de los plugins
 
-" curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-"
-" Luego de ejecutar vim por primera vez, ejecutar dentro de vim:
-"
-" :CocInstall coc-pyright coc-tsserver coc-json coc-yaml coc-lua coc-sh
-"
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+" ============================================================================
+" 2. vim-plug
+" ============================================================================
+if empty(glob('$HOME/.vim/autoload/plug.vim'))
+  silent execute
+        \ '!curl -fLo $HOME/.vim/autoload/plug.vim --create-dirs '
+        \ . 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+  autocmd VimEnter * ++once PlugInstall --sync | source $MYVIMRC
 endif
 
-" ========================
-" ⚙️ BASICS
-" ========================
-set encoding=utf-8
+
+" ============================================================================
+" 3. OPCIONES GENERALES
+" ============================================================================
 set nocompatible
+set encoding=utf-8
 
-filetype plugin indent on
-syntax on
-set runtimepath+=~/.vim/spell
-
-set number relativenumber
-set cursorline
 set hidden
-set linebreak
-set scrolloff=8 sidescrolloff=8
-
-set clipboard=unnamedplus
+set number
+set relativenumber
+set cursorline
 set mouse=a
+set clipboard=unnamedplus
 
-set ignorecase smartcase
-set incsearch hlsearch
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+
+set scrolloff=8
+set sidescrolloff=8
+set signcolumn=yes
+set display+=lastline
+set termguicolors
 
 set updatetime=200
-set timeoutlen=400
 
-set signcolumn=yes
-set termguicolors
-set display+=lastline
-set backup
-set writebackup
-set backupdir=~/.vim/backups//
-set directory=~/.vim/vimswaps//
-set grepprg=rg\ --vimgrep\ $*
-set path=.,,**
+" vim-which-key necesita timeout
+set timeout
+set timeoutlen=500
+set ttimeout
+set ttimeoutlen=100
+
 set wildmenu
-hi MatchParen cterm=bold ctermfg=yellow
-if has("persistent_undo")
-    set undodir=~/.vim/undodir//
-    set undofile
-endif
-set viminfo='10,/10,h,<100,:100,%,n$HOME/.vim/viminfo/_viminfo
-set autochdir
+set path=.,,
 set grepprg=rg\ --vimgrep\ $*
-" add useful stuff to title bar (file name, flags, cwd)
-" based on @factorylabs
-if has('title') && (has('gui_running') || &title)
-    set titlestring=
-    set titlestring+=%f
-    set titlestring+=%h%m%r%w
-    set titlestring+=\ -\ %{v:progname}
-    set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}
-endif
+
 set nowrap
+set linebreak
 set textwidth=0
 set wrapmargin=0
 
 
-" Tabs fallback
-set tabstop=4 shiftwidth=4 expandtab
+" ============================================================================
+" 4. INDENTACIÓN
+" ============================================================================
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set autoindent
+set smartindent
 
-" Leader
-let mapLeader=" "
-
-" ========================
-" 🌍 SPELL (EN + ES)
-" ========================
-"set spell
-set spelllang=en,es
+" Evita cambiar automáticamente de directorio.
+set noautochdir
 
 
-" ========================
-" 📦 PLUGINS (lazy-ish)
-" ========================
-call plug#begin('~/.vim/plugged')
+" ============================================================================
+" 5. BACKUPS / SWAP / UNDO / VIMINFO
+" ============================================================================
+set backup
+set writebackup
 
-" Mini MAP
-Plug 'severin-lemaignan/vim-minimap'
+execute 'set backupdir=' . fnameescape($HOME . '/.vim/backups//')
+execute 'set directory=' . fnameescape($HOME . '/.vim/vimswaps//')
 
-" LSP
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-" File explorer (lazy)
-Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-
-" FZF
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-if !has('nvim')
-    Plug 'rhysd/vim-healthcheck'
+if has('persistent_undo')
+  execute 'set undodir=' . fnameescape($HOME . '/.vim/undodir//')
+  set undofile
 endif
+
+if exists('+viminfofile')
+  execute 'set viminfofile=' . fnameescape($HOME . '/.vim/viminfo/viminfo')
+endif
+
+
+" ============================================================================
+" 6. TÍTULO DE LA TERMINAL
+" ============================================================================
+if has('title')
+  set title
+  set titlestring=%f\ %h%m%r%w\ -\ %{v:progname}\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}
+endif
+
+
+" ============================================================================
+" 7. FILETYPE / SINTAXIS
+" ============================================================================
+filetype plugin indent on
+syntax enable
+
+
+" ============================================================================
+" 8. PLUGINS
+" ============================================================================
+call plug#begin($HOME . '/.vim/plugged')
+
+" ---------------------------------------------------------------------------
 " UI
+" ---------------------------------------------------------------------------
+Plug 'bluz71/vim-nightfly-guicolors'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'frazrepo/vim-rainbow'
 Plug 'ap/vim-css-color'
 Plug 'kshenoy/vim-signature'
-Plug 'tpope/vim-vinegar'
 Plug 'Yggdroot/indentLine'
 
-" Git
-"Plug 'tpope/vim-fugitive'
-"Plug 'airblade/vim-gitgutter'
-
-" Editing
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
-Plug 'jiangmiao/auto-pairs'
+" ---------------------------------------------------------------------------
+" Navegación / búsqueda
+" ---------------------------------------------------------------------------
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'yegappan/mru'
 
-" Languages
+" ---------------------------------------------------------------------------
+" Which-Key
+" ---------------------------------------------------------------------------
+Plug 'liuchengxu/vim-which-key'
+
+" ---------------------------------------------------------------------------
+" LSP / completado
+" ---------------------------------------------------------------------------
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+
+" ---------------------------------------------------------------------------
+" Edición
+" ---------------------------------------------------------------------------
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
+Plug 'jiangmiao/auto-pairs'
+
+" ---------------------------------------------------------------------------
+" Lenguajes
+" ---------------------------------------------------------------------------
 Plug 'vim-python/python-syntax', { 'for': 'python' }
-Plug 'pangloss/vim-javascript', { 'for': ['javascript','typescript'] }
-Plug 'maxmellon/vim-jsx-pretty', { 'for': ['javascript','typescript'] }
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'typescript'] }
+Plug 'maxmellon/vim-jsx-pretty', { 'for': ['javascript', 'typescript'] }
 Plug 'stephpy/vim-yaml', { 'for': 'yaml' }
 Plug 'cespare/vim-toml', { 'for': 'toml' }
 Plug 'tbastos/vim-lua', { 'for': 'lua' }
-Plug 'bluz71/vim-nightfly-guicolors'
+
+" ---------------------------------------------------------------------------
+" Salud de Vim
+" ---------------------------------------------------------------------------
+Plug 'rhysd/vim-healthcheck'
 
 call plug#end()
 
-" ========================
-" 🎨 UI
-" ========================
-colorscheme nightfly
+
+" ============================================================================
+" 9. TEMA / UI
+" ============================================================================
 set background=dark
-hi Normal guibg=NONE ctermbg=NONE
-packadd hlyank
+colorscheme nightfly
 
-" MiniMAP
-let g:minimap_highlight='Visual'
+highlight Normal guibg=NONE ctermbg=NONE
 
-" ========================
-" Plugin AirLine
-" ========================
-let g:airline_detect_modified=1
-let g:airline#extensions#ale#enabled = 1
-let g:airline_theme='jellybeans'
-let g:airline#extensions#tabline#enabled = 1 " Enable the list of buffers
+highlight MatchParen
+      \ gui=bold
+      \ cterm=bold
+      \ guifg=#FFD75F
+      \ ctermfg=yellow
+
+let g:airline_detect_modified = 1
+let g:airline_theme = 'jellybeans'
 let g:airline_powerline_fonts = 1
-"usando el plugin vin-rainbow
+let g:airline#extensions#tabline#enabled = 1
+
 let g:rainbow_active = 1
 let g:rbpt_max = 16
 let g:rbpt_loadcmd_toggle = 0
 
-" ========================
-" KEY MAPPINGS
-" ========================
-inoremap jk <esc>
-nnoremap ; :Buffers<CR>
-nnoremap gl $
-nnoremap gh ^
+let g:minimap_highlight = 'Visual'
+
+let g:indentLine_char_list = ['┊', '¦', '┆', '│']
+let g:indentLine_setColors = 0
+
+
+" ============================================================================
+" 10. LEADER
+" ============================================================================
+let mapleader = ','
+let maplocalleader = ','
+
+
+" ============================================================================
+" 11. ATAJOS GENERALES
+" ============================================================================
+
+" Escape rápido
+inoremap jk <Esc>
+
+" Limpiar búsqueda
+nnoremap <silent> <Esc><Esc> :nohlsearch<CR>
+
+" Movimiento visual por líneas
+nnoremap j gj
+nnoremap k gk
+
+" Mantener cursor centrado
+nnoremap n nzz
+nnoremap N Nzz
 nnoremap # #zz
 nnoremap * *zz
-nnoremap <C-h> = <C-w>h
-nnoremap <C-j> = <C-w>j
-nnoremap <C-k> = <C-w>k
-nnoremap <C-l> = <C-w>l
-nnoremap <C-s> = :w<CR>
-nnoremap <C-d> = <C-d>zz
-nnoremap <C-u> = <C-u>zz
-nnoremap <C-f> = <C-f>zz
-nnoremap <C-b> = <C-b>zz
-nnoremap <silent><F2> :noh<CR>
+nnoremap g# g#zz
+nnoremap g* g*zz
+
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap <C-f> <C-f>zz
+nnoremap <C-b> <C-b>zz
+
+" Redimensionar ventanas
 nnoremap <C-Up> :resize +2<CR>
 nnoremap <C-Down> :resize -2<CR>
 nnoremap <C-Left> :vertical resize -2<CR>
 nnoremap <C-Right> :vertical resize +2<CR>
-nnoremap g# g#zz
-nnoremap g* g*zz
-nnoremap gc BBE
-nnoremap j gj
-nnoremap k gk
-nnoremap <Leader>fb :Buffers<CR>
-nnoremap <Leader>ff :Files<CR>
-nnoremap <Leader>fg :Rg<CR>
-nnoremap <Leader>fr :FZFMru<CR>
-nnoremap <Leader>fv :vimgrep<space>
-nnoremap <Leader>lf :call CocAction('format')<CR>
-nnoremap <Leader>n :NERDTreeToggle<CR>
-nnoremap <Leader>qq :qa!<CR>
-nnoremap <Leader>qs :wq!<CR>
-nnoremap <Leader>rn <Plug>(coc-rename)
-nnoremap <Leader>sa zg
-nnoremap <Leader>sn ]s
-nnoremap <Leader>sp [s
-nnoremap <Leader>ss :set spell!<CR>
-nnoremap <Leader>tc :tabclose<CR>
-nnoremap <Leader>te :tabedit<space>
-nnoremap <Leader>tn :tabNext<CR>
-nnoremap <Leader>to :tabonly<CR>
-nnoremap <Leader>tp :tabprev<CR>
-nnoremap <Leader>tt :bel term<CR>
-nnoremap <Leader>w = :w !sudo tee > /dev/null %<CR>
-nnoremap n nzz
-nnoremap N Nzz
-vmap s S
+
+" Relative numbers
+nnoremap <F4> :set relativenumber!<CR>
+
+" Eliminar trailing whitespace
+nnoremap <F10> :call StripTrailingWhitespaces()<CR>
+
+" Búsqueda muy-mágica en Visual
 vnoremap / /\v
-"********************************************************
-"
-"           MOVING LINES UP AND DOWN
-"
-"********************************************************
-nmap <M-Down> :m .+1<CR>
-vmap <M-Down> :m '>+1<CR>
-vmap <M-Up> :m '<-2<CR>
-nmap <M-Up> :m .-2<CR>
-"********************************************************
-let g:indentLine_char_list = ['┊', '¦', '┆', '│']
-let g:indentLine_setColors = 0
 
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
+" Terminal
+nnoremap <leader>tt :botright terminal<CR>
 
-inoremap <silent><expr> <S-TAB>
-      \ coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+" Guardar usando sudo
+nnoremap <leader>w :write !sudo tee % >/dev/null<CR>
 
+
+" ============================================================================
+" 12. BUFFERS
+" ============================================================================
+nnoremap <leader>bd :bdelete<CR>
+nnoremap <leader>bf :Buffers<CR>
+nnoremap <leader>bn :bnext<CR>
+nnoremap <leader>bp :bprevious<CR>
+nnoremap <leader>bF :bfirst<CR>
+nnoremap <leader>bl :blast<CR>
+
+
+" ============================================================================
+" 13. BÚSQUEDA / ARCHIVOS
+" ============================================================================
+nnoremap <leader>ff :Files<CR>
+nnoremap <leader>fg :Rg<CR>
+nnoremap <leader>fr :FZFMru<CR>
+nnoremap <leader>fv :vimgrep /<C-r><C-w>/gj **/*<CR>
+
+" NERDTree
+nnoremap <leader>n :NERDTreeToggle<CR>
+
+
+" ============================================================================
+" 14. CoC
+" ============================================================================
+
+" Formatear
+nnoremap <leader>lf :call CocAction('format')<CR>
+
+" Rename
+nnoremap <leader>rn <Plug>(coc-rename)
+
+" Navegación LSP
 nnoremap <silent> gd <Plug>(coc-definition)
-nnoremap <silent> K :call CocActionAsync('doHover')<CR>
+nnoremap <silent> gy <Plug>(coc-type-definition)
+nnoremap <silent> gi <Plug>(coc-implementation)
+nnoremap <silent> gr <Plug>(coc-references)
 
-" ========================
-" 🧠 LANGUAGE SETTINGS
-" ========================
-augroup lang_settings
-  autocmd!
-  autocmd FileType python setlocal tabstop=4 shiftwidth=4 expandtab
-  autocmd FileType javascript setlocal tabstop=2 shiftwidth=2
-  autocmd FileType yaml setlocal tabstop=2 shiftwidth=2
-  autocmd FileType lua setlocal tabstop=2 shiftwidth=2
-augroup END
+" Documentación
+nnoremap <silent> K :call ShowDocumentation()<CR>
 
-" Configuración específica para archivos de texto plano y Markdown
-augroup TextWrap
-  autocmd!
-  autocmd FileType text,markdown setlocal wrap linebreak textwidth=80 formatoptions+=ta
-augroup END
 
-" ========================
-" 🧹 AUTOFORMAT
-" ========================
-autocmd BufWritePre *.py silent! call CocAction('format')
-autocmd BufWritePre *.js silent! call CocAction('format')
-autocmd BufWritePre *.lua silent! call CocAction('format')
-autocmd BufEnter * :AirlineRefresh
-autocmd BufWrite * :lcd %:p:h
-" Source vim configuration file whenever it is saved
-if has('autocmd') " ignore this section if your vim does not support autocommands
-    augroup reload_vimrc
-        autocmd!
-        autocmd! BufWritePost $MYVIMRC,$MYGVIMRC nested source %
-    augroup END
-endif
+" ============================================================================
+" 15. CoC COMPLETION
+" ============================================================================
 
-" ========================
-" 🔒 LOCAL CONFIG
-" ========================
-if filereadable($HOME . '/.vimrc.local')
-  source ~/.vimrc.local
-endif
-augroup EjecucionRapida
-    autocmd!
-    " Mapear F5 para ejecutar
-    autocmd FileType python,lua,javascript nnoremap <buffer> <F5> :call EjecutarArchivo()<CR>
-augroup END
-
-" --- Función para ejecutar código en terminal flotante ---
-function! EjecutarArchivo()
-    " Guardar el archivo automáticamente antes de ejecutar
-    silent! write
-    let l:file_type = &filetype
-    let l:file_name = expand('%:p')
-    let l:cmd = ''
-    " Definir el comando según el lenguaje
-    if l:file_type == 'python'
-        let l:cmd = 'python3 ' . l:file_name
-    elseif l:file_type == 'lua'
-        let l:cmd = 'lua ' . l:file_name
-    elseif l:file_type == 'javascript'
-        let l:cmd = 'node ' . l:file_name
-    else
-        echo "Tipo de archivo no soportado"
-        return
-    endif
-    " Configuración de dimensiones de la ventana (80% del editor)
-    let l:width = float2nr(&columns * 0.8)
-    let l:height = float2nr(&lines * 0.8)
-    let l:row = float2nr((&lines - l:height) / 2)
-    let l:col = float2nr((&columns - l:width) / 2)
-    if has('nvim')
-        " Configuración específica para Neovim (Ventana flotante)
-        let l:opts = {
-            \ 'relative': 'editor',
-            \ 'row': l:row,
-            \ 'col': l:col,
-            \ 'width': l:width,
-            \ 'height': l:height,
-            \ 'style': 'minimal',
-            \ 'border': 'rounded'
-            \ }
-        let l:buf = nvim_create_buf(v:false, v:true)
-        call nvim_open_win(l:buf, v:true, l:opts)
-        " Ejecutar y mapear cierre rápido en la terminal
-        execute 'terminal ' . l:cmd
-        startinsert " Entrar en modo insertar automáticamente
-        " Mapeo local para cerrar la ventana con 'q' cuando termine el proceso
-        nnoremap <buffer> q :q<CR>
-    else
-        " Alternativa para Vim clásico (Terminal en split inferior)
-        execute 'botright terminal ++shell ' . l:cmd
-    endif
-endfunction
-
-def LineNumberColors()
-      highlight LineNrAbove guifg=#51B3EC gui=bold
-      highlight LineNr      guifg=white   gui=bold
-      highlight LineNrBelow guifg=#99C1FC gui=bold  #99C1FC
-enddef
-call LineNumberColors()
-
-" Usar <Tab> para navegar el autocompletado
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
 
+inoremap <silent><expr> <S-TAB>
+      \ coc#pum#visible() ? coc#pum#prev(1) :
+      \ "\<C-h>"
+
 function! CheckBackspace() abort
-    let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+  let l:col = col('.') - 1
+  return !l:col || getline('.')[l:col - 1] =~# '\s'
 endfunction
 
-" Ir a definición, implementación o referencias
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
 
-" Mostrar documentación con K
-nnoremap <silent> K :call ShowDocumentation()<CR>
-
-function! ShowDocumentation()
+function! ShowDocumentation() abort
   if CocAction('hasProvider', 'hover')
     call CocActionAsync('doHover')
   else
@@ -380,18 +346,273 @@ function! ShowDocumentation()
   endif
 endfunction
 
-" --- Función para eliminar trailing whitespaces ---
-function! StripTrailingWhitespaces()
-    " Preparación: guardar posición actual del cursor y la búsqueda
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " Ejecutar la sustitución: eliminar espacios al final de línea
-    %s/\s\+$//e
-    " Restaurar posición anterior y la búsqueda
-    let @/=_s
-    call cursor(l, c)
+
+" ============================================================================
+" 16. SPELL — INGLÉS + ESPAÑOL
+" ============================================================================
+set spelllang=en,es
+
+nnoremap <leader>ss :setlocal spell!<CR>
+nnoremap <leader>sa zg
+nnoremap <leader>sn ]s
+nnoremap <leader>sp [s
+
+
+" ============================================================================
+" 17. TABS
+" ============================================================================
+nnoremap <leader>tc :tabclose<CR>
+nnoremap <leader>te :tabedit 
+nnoremap <leader>tn :tabnext<CR>
+nnoremap <leader>to :tabonly<CR>
+nnoremap <leader>tp :tabprevious<CR>
+
+
+" ============================================================================
+" 18. MOVER LÍNEAS
+" ============================================================================
+nnoremap <M-Down> :move .+1<CR>
+nnoremap <M-Up> :move .-2<CR>
+
+vnoremap <M-Down> :move '>+1<CR>gv=gv
+vnoremap <M-Up> :move '<-2<CR>gv=gv
+
+
+" ============================================================================
+" 19. EJECUTAR ARCHIVOS
+" ============================================================================
+
+function! EjecutarArchivo() abort
+  update
+
+  let l:filetype = &filetype
+  let l:file = shellescape(expand('%:p'))
+
+  if l:filetype ==# 'python'
+    let l:cmd = 'python3 ' . l:file
+
+  elseif l:filetype ==# 'lua'
+    let l:cmd = 'lua ' . l:file
+
+  elseif l:filetype ==# 'javascript'
+    let l:cmd = 'node ' . l:file
+
+  else
+    echohl WarningMsg
+    echomsg 'Tipo de archivo no soportado: ' . l:filetype
+    echohl None
+    return
+  endif
+
+  botright new
+  execute 'terminal ++curwin ' . l:cmd
+  startinsert
 endfunction
 
-" --- Asociar la función a la tecla F10 (en modo Normal) ---
-nnoremap <F10> :call StripTrailingWhitespaces()<CR>
+
+augroup EjecucionRapida
+  autocmd!
+  autocmd FileType python,lua,javascript
+        \ nnoremap <buffer> <F5> :call EjecutarArchivo()<CR>
+augroup END
+
+
+" ============================================================================
+" 20. CONFIGURACIÓN POR LENGUAJE
+" ============================================================================
+augroup LangSettings
+  autocmd!
+  
+  autocmd FileType python
+        \ setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+
+  autocmd FileType javascript,typescript,json
+        \ setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+
+  autocmd FileType yaml,lua
+        \ setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+
+  autocmd FileType markdown,text
+        \ setlocal wrap linebreak textwidth=80 formatoptions+=ta
+augroup END
+
+
+" ============================================================================
+" 21. FORMATEO AUTOMÁTICO CON CoC
+" ============================================================================
+augroup CocAutoFormat
+  autocmd!
+
+  autocmd BufWritePre *.py,*.js,*.jsx,*.ts,*.tsx,*.lua
+        \ silent! call CocAction('format')
+augroup END
+
+
+" ============================================================================
+" 22. RECARGAR .vimrc AUTOMÁTICAMENTE
+" ============================================================================
+augroup ReloadVimrc
+  autocmd!
+  autocmd BufWritePost $MYVIMRC
+        \ nested source $MYVIMRC |
+        \ echomsg 'config recargada'
+augroup END
+
+
+" Recarga manual
+nnoremap <leader>sv
+      \ :source $MYVIMRC<CR>:echomsg 'config recargada'<CR>
+
+
+" ============================================================================
+" 23. ELIMINAR TRAILING WHITESPACE
+" ============================================================================
+function! StripTrailingWhitespaces() abort
+  let l:save_view = winsaveview()
+  let l:save_search = @/
+
+  keeppatterns %s/\s\+$//e
+
+  let @/ = l:save_search
+  call winrestview(l:save_view)
+endfunction
+
+
+" ============================================================================
+" 24. COLORES DE LOS NÚMEROS DE LÍNEA
+" ============================================================================
+function! LineNumberColors() abort
+  highlight LineNrAbove
+        \ guifg=#51B3EC
+        \ gui=bold
+
+  highlight LineNr
+        \ guifg=#FFFFFF
+        \ gui=bold
+
+  highlight LineNrBelow
+        \ guifg=#99C1FC
+        \ gui=bold
+endfunction
+
+call LineNumberColors()
+
+
+" ============================================================================
+" 25. vim-which-key
+" ============================================================================
+"
+" Al pulsar:
+"
+"       ,
+"
+" aparece el menú de atajos.
+"
+" Los grupos principales son:
+"
+"   ,b   Buffers
+"   ,f   Files / búsqueda
+"   ,l   LSP / CoC
+"   ,s   Spell
+"   ,t   Tabs / terminal
+"
+" Además se muestran los atajos individuales.
+"
+
+let g:which_key_map = {}
+
+" ---------------------------------------------------------------------------
+" Buffers
+" ---------------------------------------------------------------------------
+let g:which_key_map.b = {
+      \ 'name' : '+buffers',
+      \ 'd' : ['bd', 'delete buffer'],
+      \ 'f' : ['Buffers', 'lista de buffers'],
+      \ 'n' : ['bnext', 'siguiente buffer'],
+      \ 'p' : ['bprevious', 'buffer anterior'],
+      \ 'F' : ['bfirst', 'primer buffer'],
+      \ 'l' : ['blast', 'último buffer'],
+      \ }
+
+
+" ---------------------------------------------------------------------------
+" Files / búsqueda
+" ---------------------------------------------------------------------------
+let g:which_key_map.f = {
+      \ 'name' : '+find',
+      \ 'f' : ['Files', 'archivos'],
+      \ 'g' : ['Rg', 'grep'],
+      \ 'r' : ['FZFMru', 'archivos recientes'],
+      \ 'v' : ['vimgrep /<C-r><C-w>/gj **/*', 'vimgrep'],
+      \ }
+
+
+" ---------------------------------------------------------------------------
+" LSP / CoC
+" ---------------------------------------------------------------------------
+let g:which_key_map.l = {
+      \ 'name' : '+lsp',
+      \ 'f' : ['call CocAction("format")', 'formatear'],
+      \ 'r' : ['<Plug>(coc-rename)', 'renombrar'],
+      \ 'g' : {
+      \   'name' : '+goto',
+      \   'd' : ['<Plug>(coc-definition)', 'definición'],
+      \   'y' : ['<Plug>(coc-type-definition)', 'definición de tipo'],
+      \   'i' : ['<Plug>(coc-implementation)', 'implementación'],
+      \   'r' : ['<Plug>(coc-references)', 'referencias'],
+      \ },
+      \ }
+
+
+" ---------------------------------------------------------------------------
+" Spell
+" ---------------------------------------------------------------------------
+let g:which_key_map.s = {
+      \ 'name' : '+spell',
+      \ 's' : ['setlocal spell!', 'activar/desactivar'],
+      \ 'a' : ['zg', 'añadir palabra'],
+      \ 'n' : [']s', 'siguiente error'],
+      \ 'p' : ['[s', 'error anterior'],
+      \ 'v' : ['source $MYVIMRC', 'recargar vimrc'],
+      \ }
+
+
+" ---------------------------------------------------------------------------
+" Tabs + terminal
+" ---------------------------------------------------------------------------
+let g:which_key_map.t = {
+      \ 'name' : '+tabs/terminal',
+      \ 'c' : ['tabclose', 'cerrar pestaña'],
+      \ 'e' : ['tabedit', 'abrir pestaña'],
+      \ 'n' : ['tabnext', 'siguiente pestaña'],
+      \ 'p' : ['tabprevious', 'pestaña anterior'],
+      \ 'o' : ['tabonly', 'solo esta pestaña'],
+      \ 't' : ['botright terminal', 'terminal'],
+      \ }
+
+
+" ---------------------------------------------------------------------------
+" Atajos individuales
+" ---------------------------------------------------------------------------
+let g:which_key_map.n = ['NERDTreeToggle', 'explorador']
+let g:which_key_map.w = ['write !sudo tee % >/dev/null', 'guardar como root']
+
+
+" Registrar el mapa
+call which_key#register(',', 'g:which_key_map')
+
+
+" Mostrar Which-Key al pulsar Leader
+nnoremap <silent> <leader>
+      \ :<C-U>WhichKey ','<CR>
+
+vnoremap <silent> <leader>
+      \ :<C-U>WhichKeyVisual ','<CR>
+
+
+" ============================================================================
+" 26. CONFIGURACIÓN LOCAL OPCIONAL
+" ============================================================================
+if filereadable($HOME . '/.vimrc.local')
+  execute 'source ' . fnameescape($HOME . '/.vimrc.local')
+endif
