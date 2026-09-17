@@ -152,7 +152,7 @@ Plug 'catppuccin/vim', { 'as': 'catppuccin', 'branch': 'main' }
 " ---------------------------------------------------------------------------
 " Navegación / búsqueda
 " ---------------------------------------------------------------------------
-Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'yukimura1227/vim-yazi'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'yegappan/mru'
@@ -192,6 +192,20 @@ Plug 'rhysd/vim-healthcheck'
 
 call plug#end()
 
+" ============================================================================
+" 9. Yazy File Manager
+" ============================================================================
+" Path to yazi executable (default: 'yazi')
+let g:yazi_executable = 'yazi'
+
+" Enable opening multiple files (default: 1)
+let g:yazi_open_multiple = 1
+
+" Replace netrw with yazi (default: 0)
+let g:yazi_replace_netrw = 1
+
+" Disable default key mappings (default: 0)
+let g:yazi_no_mappings = 0
 
 " ============================================================================
 " 9. TEMA / UI
@@ -297,8 +311,11 @@ nnoremap <leader>fg :Rg<CR>
 nnoremap <leader>fr :FZFMru<CR>
 nnoremap <leader>fv :vimgrep /<C-r><C-w>/gj **/*<CR>
 
+" Yazi
+nnoremap <leader>n :Yazi<CR>
+
 " NERDTree
-nnoremap <leader>n :NERDTreeToggle<CR>
+"nnoremap <leader>n :NERDTreeToggle<CR>
 
 
 " ============================================================================
