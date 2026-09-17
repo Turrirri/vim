@@ -51,6 +51,7 @@ set number
 set relativenumber
 set cursorline
 set mouse=a
+set mousemodel=extend
 set clipboard=unnamedplus
 
 set ignorecase
