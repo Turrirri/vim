@@ -613,7 +613,7 @@ let g:which_key_map.t = {
 " ---------------------------------------------------------------------------
 " Atajos individuales
 " ---------------------------------------------------------------------------
-let g:which_key_map.n = ['NERDTreeToggle', 'explorador']
+let g:which_key_map.n = ['Yazi', 'explorador']
 let g:which_key_map.w = ['write !sudo tee % >/dev/null', 'guardar como root']
 
 
