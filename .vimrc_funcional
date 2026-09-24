@@ -497,65 +497,6 @@ function! StripTrailingWhitespaces() abort
 endfunction
 
 
-
-" ============================================================================
-" 24. RESALTAR TEXTO COPIADO / YANK
-" ============================================================================
-" Resalta temporalmente el texto después de copiarlo con:
-"   y       yank en modo normal
-"   yy      copiar línea
-"   y{mov}  copiar mediante un movimiento
-"   y       copiar selección en modo visual
-"
-" No requiere ningún plugin externo.
-
-function! s:ClearYankHighlight(timer) abort
-  if get(b:, 'yank_match_id', -1) != -1
-    silent! call matchdelete(b:yank_match_id)
-    let b:yank_match_id = -1
-  endif
-endfunction
-
-function! HighlightYankedText() abort
-  " Elimina un resaltado anterior si todavía existe.
-  if get(b:, 'yank_match_id', -1) != -1
-    silent! call matchdelete(b:yank_match_id)
-    let b:yank_match_id = -1
-  endif
-
-  let l:start = getpos("'[")
-  let l:end = getpos("']")
-  let l:positions = []
-
-  if l:start[1] == l:end[1]
-    " Yank dentro de una sola línea.
-    let l:length = max([1, l:end[2] - l:start[2] + 1])
-    call add(l:positions, [l:start[1], l:start[2], l:length])
-  else
-    " Primera línea: desde la columna inicial hasta el final.
-    call add(l:positions, [l:start[1], l:start[2], 999999])
-
-    " Líneas intermedias completas.
-    for l:line in range(l:start[1] + 1, l:end[1] - 1)
-      call add(l:positions, [l:line, 1, 999999])
-    endfor
-
-    " Última línea: desde el comienzo hasta la columna final.
-    call add(l:positions, [l:end[1], 1, max([1, l:end[2]])])
-  endif
-
-  let b:yank_match_id = matchaddpos('IncSearch', l:positions, 10)
-
-  " Mantener el resaltado durante 500 ms.
-  call timer_start(500, function('s:ClearYankHighlight'))
-endfunction
-
-augroup HighlightYank
-  autocmd!
-  autocmd TextYankPost * if v:event.operator ==# 'y' | silent! call HighlightYankedText() | endif
-augroup END
-
-
 " ============================================================================
 " 24. COLORES DE LOS NÚMEROS DE LÍNEA
 " ============================================================================
