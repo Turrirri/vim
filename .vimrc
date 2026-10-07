@@ -178,7 +178,8 @@ Plug 'jiangmiao/auto-pairs'
 " ---------------------------------------------------------------------------
 " Lenguajes
 " ---------------------------------------------------------------------------
-Plug 'vim-python/python-syntax', { 'for': 'python' }
+" Plug 'vim-python/python-syntax', { 'for': 'python' }
+Plug 'aaronbcarlisle/python-syntax-enhanced'
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'typescript'] }
 Plug 'maxmellon/vim-jsx-pretty', { 'for': ['javascript', 'typescript'] }
 Plug 'stephpy/vim-yaml', { 'for': 'yaml' }
@@ -234,7 +235,8 @@ let g:minimap_highlight = 'Visual'
 
 let g:indentLine_char_list = ['┊', '¦', '┆', '│']
 let g:indentLine_setColors = 0
-
+" Enable all pyhton sintax features
+let g:python_enhanced_highlight_all = 1
 
 " ============================================================================
 " 10. LEADER
