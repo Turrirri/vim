@@ -148,6 +148,7 @@ Plug 'ap/vim-css-color'
 Plug 'kshenoy/vim-signature'
 Plug 'Yggdroot/indentLine'
 Plug 'catppuccin/vim', { 'as': 'catppuccin', 'branch': 'main' }
+Plug 'oxidescheme/vim'
 
 " ---------------------------------------------------------------------------
 " Navegación / búsqueda
@@ -212,7 +213,11 @@ let g:yazi_no_mappings = 0
 " 9. TEMA / UI
 " ============================================================================
 set background=dark
-colorscheme catppuccin
+let g:oxide_transparent = 1
+let g:oxide_italic_comments = 1
+let g:oxide_terminal_colors = 0
+let g:oxide_colors = {'teal': '#ed756e'}
+colorscheme oxide
 
 highlight Normal guibg=NONE ctermbg=NONE
 
@@ -223,7 +228,7 @@ highlight MatchParen
       \ ctermfg=yellow
 
 let g:airline_detect_modified = 1
-let g:airline_theme = 'catppuccin_mocha'
+"let g:airline_theme = 'tomorrow'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
