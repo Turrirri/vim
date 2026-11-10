@@ -149,6 +149,8 @@ Plug 'kshenoy/vim-signature'
 Plug 'Yggdroot/indentLine'
 Plug 'catppuccin/vim', { 'as': 'catppuccin', 'branch': 'main' }
 Plug 'oxidescheme/vim'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'ghifarit53/tokyonight-vim'
 
 " ---------------------------------------------------------------------------
 " Navegación / búsqueda
@@ -201,7 +203,7 @@ call plug#end()
 let g:yazi_executable = 'yazi'
 
 " Enable opening multiple files (default: 1)
-let g:yazi_open_multiple = 1
+let g:yazi_open_multiple = 0
 
 " Replace netrw with yazi (default: 0)
 let g:yazi_replace_netrw = 1
@@ -213,11 +215,17 @@ let g:yazi_no_mappings = 0
 " 9. TEMA / UI
 " ============================================================================
 set background=dark
-let g:oxide_transparent = 1
-let g:oxide_italic_comments = 1
-let g:oxide_terminal_colors = 0
-let g:oxide_colors = {'teal': '#ed756e'}
-colorscheme oxide
+autocmd ColorScheme * highlight Normal ctermbg=0 guibg=#1e1e1e
+"let g:oxide_transparent = 0
+"let g:oxide_italic_comments = 1
+"let g:oxide_terminal_colors = 0
+"let g:oxide_colors = {'teal': '#ed756e'}
+set termguicolors
+
+let g:tokyonight_style = 'night' " available: night, storm
+let g:tokyonight_enable_italic = 1
+
+colorscheme tokyonight
 
 highlight Normal guibg=NONE ctermbg=NONE
 
@@ -228,7 +236,7 @@ highlight MatchParen
       \ ctermfg=yellow
 
 let g:airline_detect_modified = 1
-"let g:airline_theme = 'tomorrow'
+let g:airline_theme = 'tokyonight'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
@@ -319,7 +327,7 @@ nnoremap <leader>fr :FZFMru<CR>
 nnoremap <leader>fv :vimgrep /<C-r><C-w>/gj **/*<CR>
 
 " Yazi
-nnoremap <leader>n :Yazi<CR>
+nnoremap <leader>n :YaziCwd<CR>
 
 " NERDTree
 "nnoremap <leader>n :NERDTreeToggle<CR>
